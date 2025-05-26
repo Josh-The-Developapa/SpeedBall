@@ -5,17 +5,30 @@
   height: 100vh;
   width: 100vw;
 }
-
-.Black-box-tilted {
-  height: 70vh;
+/* 
+.Black-box-flat {
+  position: absolute;
+  bottom: 0;
+  left: 0;
   width: 100vw;
-  background-color: #000000;
+  height: 400px;
+  background-color: #000;
+  opacity: 0.25;
+  z-index: 100;
+  pointer-events: none; /* so it doesn’t block clicks */
+/*Try to use Media Queries to set the height of the black tilted box depending on screen width*/
+.Black-box-tilted {
+  height: 65vh;
+  width: 100vw;
+  background-color: black;
   opacity: 0.5;
   position: absolute;
   bottom: 0;
   left: 0;
   z-index: 100;
-  clip-path: polygon(0% 45%, 100% 0%, 100% 100%, 0% 100%);
+
+  /* Keep top edge at a fixed 10° angle */
+  clip-path: polygon(0 calc(18.5vw), 100% 0, 100% 100%, 0% 100%);
 }
 
 .section-1 {
@@ -37,6 +50,9 @@
   height: 100vh;
   min-height: 100vh;
   margin: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .SB-text-container {

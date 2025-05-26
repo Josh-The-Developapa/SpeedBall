@@ -12,13 +12,13 @@
 }
 
 .SB-Logo-Header {
-  height: 40px;
-  width: auto;
+  height: 120px;
+  width: 120px;
 }
 
 .Menu-icon {
   height: 40px;
   width: auto;
   cursor: pointer;
-  color: black;
+  color: #000000;
 }
