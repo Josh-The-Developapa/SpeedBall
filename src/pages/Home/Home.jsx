@@ -1,10 +1,11 @@
-import React from 'react';
-import './Home.css';
-import Header from '../../components/Navbar/Header';
-import ProductCard from '../../components/ProductCard/ProductCard';
-import Product1 from '../../assets/full-fit.svg';
-import Product2 from '../../assets/jacket.svg';
-import Product3 from '../../assets/denim-jeans.svg';
+import React from "react";
+import "./Home.css";
+import Header from "../../components/Navbar/Header";
+import Footer from "../../components/Footer/Footer";
+import ProductCard from "../../components/ProductCard/ProductCard";
+import Product1 from "../../assets/full-fit.svg";
+import Product2 from "../../assets/jacket.svg";
+import Product3 from "../../assets/denim-jeans.svg";
 
 function Home() {
   return (
@@ -20,6 +21,7 @@ function Home() {
         </div>
       </div>
 
+      {/* turn this into a spinning carousel */}
       <div className="section-2">
         {/* <h1>Shop Apparel</h1> */}
         <ProductCard
@@ -31,21 +33,22 @@ function Home() {
           product="Denim Campaign Jacket"
           price="UGX 45,000"
           image={Product2}
-          image_dimensions={{ height: 'auto', width: '100%' }}
+          image_dimensions={{ height: "auto", width: "100%" }}
         />
         <ProductCard
           product="Denim Campaign Jeans"
           price="UGX 45,000"
           image={Product3}
           image_dimensions={{
-            height: '100%',
-            width: '100%',
-            objectFit: 'cover',
+            height: "100%",
+            width: "100%",
+            objectFit: "cover",
           }}
         />
       </div>
 
       <div className="section-1" />
+      <Footer />
     </div>
   );
 }
