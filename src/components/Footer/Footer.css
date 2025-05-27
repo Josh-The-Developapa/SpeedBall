@@ -1,0 +1,93 @@
+footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 3rem 1.5rem; /* py-12 px-6 */
+  font-size: 0.875rem; /* text-sm */
+  gap: 1.5rem; /* gap-6 */
+}
+
+/* Social Media Section */
+footer > div:first-child {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* gap-4 */
+}
+
+footer > div:first-child > p {
+  font-weight: 600; /* font-semibold */
+}
+
+footer > div:first-child > div {
+  display: flex;
+  gap: 1rem; /* gap-4 */
+  font-size: 1.25rem; /* text-xl */
+}
+
+/* Email Signup Section */
+footer > div:last-child {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* gap-4 */
+}
+
+footer > div:last-child > p:first-child {
+  font-weight: 600; /* font-semibold */
+}
+
+footer > div:last-child > p:nth-child(2) {
+  font-size: 0.75rem; /* text-xs */
+}
+
+/* Input Field */
+footer input {
+  width: 16rem; /* w-64 */
+  background-color: black;
+  border: 1px solid white;
+  color: white;
+  padding: 0.5rem 1rem; /* px-4 py-2 */
+}
+
+/* Button */
+footer button {
+  width: 16rem; /* w-64 */
+  border: 1px solid white;
+  padding: 0.5rem 1rem; /* px-4 py-2 */
+  color: white;
+  transition: background-color 0.2s ease; /* transition */
+}
+
+footer button:hover {
+  background-color: white;
+  color: black;
+}
+
+/* Disclaimer Text */
+footer > div:last-child > p:last-child {
+  font-size: 0.75rem; /* text-xs */
+  opacity: 0.6; /* opacity-60 */
+  max-width: 16rem; /* max-w-[16rem] */
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+  footer {
+    flex-direction: row;
+    padding-left: 5%; /* Added left padding */
+    padding-right: 5%; /* Added right padding */
+  }
+
+  /* Calculate widths accounting for padding */
+  footer > div:first-child {
+    width: calc(40% - 1.5rem); /* 40% minus half of gap */
+    padding-right: 1.5rem; /* Internal spacing */
+  }
+
+  footer > div:last-child {
+    width: calc(60% - 1.5rem); /* 60% minus half of gap */
+    padding-left: 1.5rem; /* Internal spacing */
+  }
+}
