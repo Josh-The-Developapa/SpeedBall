@@ -7,9 +7,8 @@ import { useLocation } from 'react-router-dom';
 function Header() {
   const [iconColors, setIconColors] = useState('#000000');
   const location = useLocation();
-  const [logoDisplay, setLogoDisplay] = useState(
-    'block' ? location.pathname === '/about' : 'none'
-  );
+  const [logoDisplay, setLogoDisplay] = useState('none');
+  const [menuColor, setMenuColor] = useState('#ffffff');
 
   const SB_Header_SVG = () => {
     return (
@@ -53,6 +52,9 @@ function Header() {
 
   useEffect(() => {
     window.addEventListener('scroll', () => {
+      if (location.pathname == '/about') {
+        setLogoDisplay('none');
+      }
       if (location.pathname == '/') {
         if (window.scrollY > 0.9 * window.innerHeight) {
           setLogoDisplay('block');
@@ -89,7 +91,6 @@ function Header() {
       <div
         style={{
           width: '50%',
-          // backgroundColor: 'red',
           height: '100%',
           display: 'flex',
           justifyContent: 'flex-end',
