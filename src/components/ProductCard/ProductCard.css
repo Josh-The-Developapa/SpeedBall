@@ -6,13 +6,18 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: #232323;
+  margin: 0;
 }
 
 .image-holder {
   height: 400px;
+  object-fit: contain;
+  margin: 0;
 }
 
 .product-image {
   height: 100%;
   width: auto;
+  margin: 0;
 }

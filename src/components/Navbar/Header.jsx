@@ -49,7 +49,7 @@ function Header() {
 
   useEffect(() => {
     window.addEventListener('scroll', () => {
-      if (window.scrollY > window.innerHeight) {
+      if (window.scrollY > 0.9 * window.innerHeight) {
         setLogoDisplay('block');
         setIconColors('#ffffff');
       } else {
@@ -72,10 +72,9 @@ function Header() {
           paddingTop: 0,
         }}
       >
-        <SB_Header_SVG
-          className="SB-Logo-Header"
-          style={{ display: logoDisplay }}
-        />
+        <div style={{ display: logoDisplay }}>
+          <SB_Header_SVG className="SB-Logo-Header" />
+        </div>
       </div>
 
       <div
