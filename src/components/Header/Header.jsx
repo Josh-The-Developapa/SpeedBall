@@ -111,6 +111,7 @@ function Header() {
       </div>
       <div className="Header-right">
         <FiMenu className="Menu-icon" style={{ color: iconColors }} />
+        <FiMenu className="Menu-icon" style={{ color: iconColors }} />
       </div>
     </div>
   );
