@@ -1,6 +1,6 @@
-import React from "react";
-import "./Footer.css";
-import { SocialIcon } from "react-social-icons";
+import React from 'react';
+import './Footer.css';
+import { SocialIcon } from 'react-social-icons';
 
 function Footer() {
   return (
@@ -9,10 +9,26 @@ function Footer() {
       <div className="w-full md:w-[40%] flex flex-col gap-4">
         <p className="font-semibold">Connect with us</p>
         <div className="flex gap-4 text-xl">
-          <SocialIcon bgColor="#000000" url="https://facebook.com" />
-          <SocialIcon bgColor="#000000" url="https://tiktok.com" />
-          <SocialIcon bgColor="#000000" url="https://instagram.com" />
-          <SocialIcon bgColor="#000000" url="https://x.com" />
+          <SocialIcon
+            bgColor="#000000"
+            url="https://facebook.com"
+            className="social-icon"
+          />
+          <SocialIcon
+            bgColor="#000000"
+            url="https://tiktok.com"
+            className="social-icon"
+          />
+          <SocialIcon
+            bgColor="#000000"
+            url="https://instagram.com"
+            className="social-icon"
+          />
+          <SocialIcon
+            bgColor="#000000"
+            url="https://x.com"
+            className="social-icon"
+          />
         </div>
       </div>
 
@@ -31,7 +47,7 @@ function Footer() {
           SIGN UP
         </button>
         <p className="text-xs opacity-60 max-w-[16rem]">
-          {" "}
+          {' '}
           {/* Optional: Constrain disclaimer width */}
           By signing up, you agree to receive emails regarding speedball events
           and merchandise and accept that your personal data will be collected

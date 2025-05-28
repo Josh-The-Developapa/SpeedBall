@@ -6,6 +6,7 @@ footer {
   padding: 3rem 1.5rem; /* py-12 px-6 */
   font-size: 0.875rem; /* text-sm */
   gap: 1.5rem; /* gap-6 */
+  background-color: black;
 }
 
 /* Social Media Section */
@@ -90,4 +91,8 @@ footer > div:last-child > p:last-child {
     width: calc(60% - 1.5rem); /* 60% minus half of gap */
     padding-left: 1.5rem; /* Internal spacing */
   }
+}
+
+.social-icon {
+  border: 2px solid white;
 }
