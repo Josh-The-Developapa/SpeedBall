@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import './Header.css';
-import SB_Logo from '../../assets/SPEEBALL/logo/sb-icon.svg';
-import { FiMenu } from 'react-icons/fi';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import "./Header.css";
+import SB_Logo from "../../assets/SPEEBALL/logo/sb-icon.svg";
+import { FiMenu } from "react-icons/fi";
+import { useLocation } from "react-router-dom";
 
 function Header() {
-  const [iconColors, setIconColors] = useState('#000000');
+  const [iconColors, setIconColors] = useState("#000000");
   const location = useLocation();
   const [logoDisplay, setLogoDisplay] = useState(
-    'block' ? location.pathname === '/about' : 'none'
+    "block" ? location.pathname === "/about" : "none"
   );
 
   const SB_Header_SVG = () => {
@@ -52,52 +52,31 @@ function Header() {
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', () => {
-      if (location.pathname == '/') {
+    window.addEventListener("scroll", () => {
+      if (location.pathname == "/") {
         if (window.scrollY > 0.9 * window.innerHeight) {
-          setLogoDisplay('block');
-          setIconColors('#ffffff');
+          setLogoDisplay("block");
+          setIconColors("#ffffff");
         } else {
-          setLogoDisplay('none');
-          setIconColors('#000000');
+          setLogoDisplay("none");
+          setIconColors("#000000");
         }
       } else {
-        setLogoDisplay('block');
-        setIconColors('#000000');
+        setLogoDisplay("block");
+        setIconColors("#000000");
       }
     });
   }, []);
 
   return (
     <div className="Header">
-      <div
-        style={{
-          width: '50%',
-          height: '100%',
-          paddingLeft: '15px',
-          display: 'flex',
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-          paddingTop: 0,
-        }}
-      >
-        <div style={{ display: logoDisplay }}>
-          <SB_Header_SVG className="SB-Logo-Header" />
-        </div>
+      <div className="Header-left">
+        {showLogo && (
+          <SB_Header_SVG className="SB-Logo-Header" fill={iconColor} />
+        )}
       </div>
-
-      <div
-        style={{
-          width: '50%',
-          // backgroundColor: 'red',
-          height: '100%',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          paddingRight: '15px',
-        }}
-      >
-        <FiMenu className="Menu-icon" style={{ color: iconColors }} />
+      <div className="Header-right">
+        <FiMenu className="Menu-icon" style={{ color: iconColor }} />
       </div>
     </div>
   );

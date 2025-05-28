@@ -7,10 +7,8 @@ export default function AboutPage() {
     <div className="about min-h-screen bg-black text-white font-sans flex flex-col">
       <Header />
 
-      {/* Section with manual width control */}
-      <section className="flex flex-col md:flex-row w-full flex-grow">
-        {/* Image (adjust width ratio as needed) */}
-        <div className="w-full md:w-[60%] h-[50vh] md:h-full relative">
+      <section className="flex flex-col xl:flex-row w-full flex-grow">
+        <div className="w-full xl:w-[60%] h-[50vh] xl:h-full relative">
           <img
             src={hero}
             alt="Hero"
@@ -18,14 +16,13 @@ export default function AboutPage() {
           />
 
           {/* Mobile/tablet: bottom fade */}
-          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black to-transparent md:hidden pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black to-transparent xl:hidden pointer-events-none" />
 
-          {/* Desktop: right fade */}
-          <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-black to-transparent hidden md:block pointer-events-none" />
+          {/* Desktop (≥1370px): right fade */}
+          <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-black to-transparent hidden xl:block pointer-events-none" />
         </div>
 
-        {/* Description (takes remaining space) */}
-        <div className="w-full md:w-[40%] px-6 py-12 md:py-24 md:px-12 text-base md:text-lg leading-relaxed overflow-y-auto">
+        <div className="w-full xl:w-[40%] px-6 py-12 xl:py-24 xl:px-12 text-base xl:text-lg leading-relaxed overflow-y-auto text-left">
           <p className="mb-6">
             Speedball is a contemporary fashion house rooted in Kampala's
             underground, where sound, sweat, and subversion converge. Born at
