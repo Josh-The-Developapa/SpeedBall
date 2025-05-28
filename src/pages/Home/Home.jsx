@@ -3,6 +3,7 @@ import "./Home.css";
 
 // Components
 import Header from "../../components/Navbar/Header";
+import Footer from "../../components/Footer/Footer";
 import ProductCard from "../../components/ProductCard/ProductCard";
 
 // Assets
@@ -96,6 +97,7 @@ function Home() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
