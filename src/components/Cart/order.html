@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Conspiracy Order Summary</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap");
+
+      body {
+        background-color: #000;
+        color: #fff;
+        font-family: "Montserrat", sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .logo {
+        max-width: 100px;
+        height: auto;
+      }
+      g .order-summary {
+        background-color: #222;
+        color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      }
+
+      .title {
+        font-family: "Caveat Brush", cursive;
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+
+      .summary-text {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .order-details {
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+
+      .order-label {
+        font-weight: bold;
+      }
+
+      .order-link {
+        color: #00bcd4;
+        text-decoration: none;
+      }
+
+      .order-link:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <img
+          src="../../assets/Logo.svg"
+          alt="Conspiracy Logo"
+          class="logo"
+          style="height: 120px"
+        />
+      </div>
+      <div class="order-summary">
+        <h1 class="title">Order Summary</h1>
+        <p class="summary-text">Hello Conspiracy,</p>
+        <p class="summary-text">
+          You have received a new order for shirts. Below is a brief summary of
+          the order. For more details, visit the
+          <a
+            href="https://conspiracy-ug.onrender.com/orders/3jqLJb4Z"
+            class="order-link"
+            >Orders Page</a
+          >.
+        </p>
+        <div class="order-details">
+          <p>
+            <span class="order-label">Full Name:</span>
+            ${checkoutData.address.fullName} <br /><br />
+            <span class="order-label">Phone Number:</span>
+            ${checkoutData.address.phoneNumber} <br /><br />
+            <span class="order-label">City:</span>
+            ${checkoutData.address.cityTown} <br /><br />
+            <span class="order-label">Street:</span>
+            ${checkoutData.address.street} <br /><br />
+            <span class="order-label">Total number of shirts:</span>
+            ${checkoutData.totalShirts} <br /><br />
+            <span class="order-label">Date:</span>
+            ${checkoutData.date .split('') .splice(0, order.date.length - 3)
+            .join('')} <br /><br />
+            <span class="order-label">Coupon:</span>
+            ${checkoutData.coupon.trim() == '' ? 'None' : checkoutData.coupon}
+            <br /><br />
+            <span class="order-label">TOTAL COST:</span>
+            ${checkoutData.totalCost.toLocaleString('en-US')} UGX
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
