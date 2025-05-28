@@ -1,6 +1,6 @@
-import React from 'react';
-import './Footer.css';
-import { SocialIcon } from 'react-social-icons';
+import React from "react";
+import "./Footer.css";
+import { SocialIcon } from "react-social-icons";
 
 function Footer() {
   return (
@@ -47,7 +47,7 @@ function Footer() {
           SIGN UP
         </button>
         <p className="text-xs opacity-60 max-w-[16rem]">
-          {' '}
+          {" "}
           {/* Optional: Constrain disclaimer width */}
           By signing up, you agree to receive emails regarding speedball events
           and merchandise and accept that your personal data will be collected

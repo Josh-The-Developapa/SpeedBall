@@ -107,17 +107,7 @@ function Header() {
           />
         </div>
       </div>
-
-      <div
-        style={{
-          width: '50%',
-          height: '100%',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          paddingRight: '15px',
-        }}
-      >
+      <div className="Header-right">
         <FiMenu className="Menu-icon" style={{ color: iconColors }} />
       </div>
     </div>
