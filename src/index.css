@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Alata&family=Kumbh+Sans:wght@100..900&display=swap");
 @import "tailwindcss";
+
 :root {
   font-family: "Alata", sans-serif;
   line-height: 1.5;
@@ -13,6 +14,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* In your global CSS */
+html,
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+body > * {
+  flex-shrink: 0; /* Prevents compression */
+}
 a {
   font-weight: 500;
   color: #646cff;
