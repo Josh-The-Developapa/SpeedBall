@@ -6,8 +6,10 @@ import { useLocation } from 'react-router-dom';
 
 function Header() {
   const [iconColors, setIconColors] = useState('#000000');
-  const [logoDisplay, setLogoDisplay] = useState('block');
   const location = useLocation();
+  const [logoDisplay, setLogoDisplay] = useState(
+    'block' ? location.pathname === '/about' : 'none'
+  );
 
   const SB_Header_SVG = () => {
     return (

@@ -1,6 +1,6 @@
-import hero from "../../assets/WhatsApp Image 2025-05-22 at 22.36.00.jpeg";
-import Header from "../../components/Navbar/Header";
-import Footer from "../../components/Footer/Footer";
+import hero from '../../assets/WhatsApp Image 2025-05-22 at 22.36.00.jpeg';
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
 
 export default function AboutPage() {
   return (

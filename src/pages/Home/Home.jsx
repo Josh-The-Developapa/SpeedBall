@@ -1,22 +1,22 @@
-import React from "react";
-import "./Home.css";
+import React from 'react';
+import './Home.css';
 
 // Components
-import Header from "../../components/Navbar/Header";
-import Footer from "../../components/Footer/Footer";
-import ProductCard from "../../components/ProductCard/ProductCard";
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import ProductCard from '../../components/ProductCard/ProductCard';
 
 // Assets
-import Product1 from "../../assets/full-fit.svg";
-import Product2 from "../../assets/jacket.svg";
-import Product3 from "../../assets/denim-jeans.svg";
+import Product1 from '../../assets/full-fit.svg';
+import Product2 from '../../assets/jacket.svg';
+import Product3 from '../../assets/denim-jeans.svg';
 
 // Swiper stuff
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 function Home() {
   return (
@@ -61,7 +61,7 @@ function Home() {
               product="Denim Campaign Jacket"
               price="UGX 45,000"
               image={Product2}
-              image_dimensions={{ height: "auto", width: "100%" }}
+              image_dimensions={{ height: 'auto', width: '100%' }}
             />
           </SwiperSlide>
 
@@ -71,9 +71,9 @@ function Home() {
               price="UGX 45,000"
               image={Product3}
               image_dimensions={{
-                height: "100%",
-                width: "100%",
-                objectFit: "cover",
+                height: '100%',
+                width: '100%',
+                objectFit: 'cover',
               }}
             />
           </SwiperSlide>
@@ -87,7 +87,7 @@ function Home() {
           <div className="speedball-logo-and-text-container">
             <div className="speedball-logo" />
             <p
-              style={{ paddingBottom: "20px", textAlign: "justify", margin: 0 }}
+              style={{ paddingBottom: '20px', textAlign: 'justify', margin: 0 }}
             >
               Rooted in the energy of the streets, our brand is built for those
               who move against the grain, challenge norms, and carve out their
