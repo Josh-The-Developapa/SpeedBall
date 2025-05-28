@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './Header.css';
 // import SB_Logo from '../../assets/SPEEBALL/logo/sb-icon.svg'; // Not used, can be removed
 import { FiMenu } from 'react-icons/fi';
-import { useLocation } from 'react-router-dom';
+import { useLocation, NavLink } from 'react-router-dom';
 
 function Header() {
   const location = useLocation();
@@ -101,10 +101,12 @@ function Header() {
       >
         {/* Logo is always displayed, its color is managed by iconColors */}
         <div style={{ display: logoDisplay }}>
-          <SB_Header_SVG
-            className="SB-Logo-Header"
-            style={{ display: logoDisplay }}
-          />
+          <NavLink to="/">
+            <SB_Header_SVG
+              className="SB-Logo-Header"
+              style={{ display: logoDisplay }}
+            />
+          </NavLink>
         </div>
       </div>
       <div className="Header-right">

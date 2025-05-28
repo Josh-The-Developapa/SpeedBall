@@ -11,3 +11,8 @@
 .description {
   overflow-wrap: break-word; /* Breaks long words to prevent overflow */
 }
+
+.about-image {
+  height: 100vh;
+  /* width: 100vw; */
+}
