@@ -1,0 +1,13 @@
+.about {
+  display: flex;
+  flex-direction: column; /* Stacks vertically (prevents overlap) */
+  gap: 1rem; /* Adds space between elements */
+}
+
+.about section {
+  flex-grow: 1;
+}
+
+.description {
+  overflow-wrap: break-word; /* Breaks long words to prevent overflow */
+}
