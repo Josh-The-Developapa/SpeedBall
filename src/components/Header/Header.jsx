@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import './Header.css';
-import SB_Logo from '../../assets/SPEEBALL/logo/sb-icon.svg';
+// import SB_Logo from '../../assets/SPEEBALL/logo/sb-icon.svg'; // Not used, can be removed
 import { FiMenu } from 'react-icons/fi';
 import { useLocation } from 'react-router-dom';
 
 function Header() {
-  const [iconColors, setIconColors] = useState('#000000');
   const location = useLocation();
+
+  // Initialize colors based on the current path immediately
+  const initialIconColor = location.pathname === '/' ? '#000000' : '#000000';
+  const [iconColors, setIconColors] = useState(initialIconColor);
+
+  // Logo is always displayed on all pages by default
   const [logoDisplay, setLogoDisplay] = useState('none');
-  const [menuColor, setMenuColor] = useState('#ffffff');
+
+  // Menu color state (though it seems tied to iconColors in your current setup)
+  const [menuColor, setMenuColor] = useState('#ffffff'); // Keep this if menu color can be different
 
   const SB_Header_SVG = () => {
     return (
@@ -51,24 +58,33 @@ function Header() {
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', () => {
-      if (location.pathname == '/about') {
-        setLogoDisplay('none');
-      }
-      if (location.pathname == '/') {
+    const handleScroll = () => {
+      if (location.pathname === '/') {
+        // Only apply scroll logic on the homepage
         if (window.scrollY > 0.9 * window.innerHeight) {
+          setIconColors('#ffffff'); // White on scroll down
           setLogoDisplay('block');
-          setIconColors('#ffffff');
         } else {
           setLogoDisplay('none');
-          setIconColors('#000000');
+          setIconColors('#000000'); // Black initially/on scroll up
         }
       } else {
-        setLogoDisplay('block');
+        // For all other pages (e.g., /about), ensure it's always black and visible
         setIconColors('#000000');
+        setLogoDisplay('block');
       }
-    });
-  }, []);
+    };
+
+    // Call handleScroll once on component mount to set initial state correctly
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [location.pathname]); // Re-run effect if the path changes
 
   return (
     <div className="Header">
@@ -83,8 +99,12 @@ function Header() {
           paddingTop: 0,
         }}
       >
+        {/* Logo is always displayed, its color is managed by iconColors */}
         <div style={{ display: logoDisplay }}>
-          <SB_Header_SVG className="SB-Logo-Header" />
+          <SB_Header_SVG
+            className="SB-Logo-Header"
+            style={{ display: logoDisplay }}
+          />
         </div>
       </div>
 
