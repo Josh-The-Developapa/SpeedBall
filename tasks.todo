@@ -1,20 +1,50 @@
-pages to make:
-for each, ensure completion for all devices
- - landing (Emmanuel)
- - home (Joshua)
- - about (Emmanuel)
- - shop (Joshua)
- - events (Joshua)
- - cart (Emmanuel)
+# Pages to Make
+- [ ] Landing Page
+  - Assignee: Emmanuel
+  - Progress: [ ] Mobile [ ] Tablet [ ] Desktop
 
-other (functionality):
- - accounts (Joshua)
- - newsletter
- - return requests
- - contact (Emmanuel)
- - social media (Emmanuel)
+- [ ] Home Page
+  - Assignee: Joshua
+  - Progress: [ ] Mobile [ ] Tablet [ ] Desktop
 
-other (UI components):
- - fix footer (add customer service) (Emmanuel)
- - fix navbar/header (Joshua)
- - fix fonts (Emmanuel)
+- [ ] About Page
+  - Assignee: Emmanuel
+  - Progress: [ ] Mobile [ ] Tablet [ ] Desktop
+
+- [ ] Shop Page
+  - Assignee: Joshua
+  - Progress: [ ] Mobile [ ] Tablet [ ] Desktop
+
+- [ ] Events Page
+  - Assignee: Joshua
+  - Progress: [ ] Mobile [ ] Tablet [ ] Desktop
+
+- [ ] Cart Page
+  - Assignee: Emmanuel
+  - Progress: [ ] Mobile [ ] Tablet [ ] Desktop
+
+# Functionality
+- [ ] Accounts System
+  - Assignee: Joshua
+
+- [ ] Newsletter Integration
+  - Assignee: 
+
+- [ ] Return Requests System
+  - Assignee: 
+
+- [ ] Contact Form
+  - Assignee: Emmanuel
+
+- [ ] Social Media Integration
+  - Assignee: Emmanuel
+
+# UI Components
+- [ ] Footer Fix (add customer service)
+  - Assignee: Emmanuel
+
+- [ ] Navbar/Header Fix
+  - Assignee: Joshua
+
+- [ ] Font Fixes
+  - Assignee: Emmanuel
