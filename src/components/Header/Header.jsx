@@ -71,12 +71,12 @@ function Header() {
   return (
     <div className="Header">
       <div className="Header-left">
-        {showLogo && (
-          <SB_Header_SVG className="SB-Logo-Header" fill={iconColor} />
+        {logoDisplay && (
+          <SB_Header_SVG className="SB-Logo-Header" fill={iconColors} />
         )}
       </div>
       <div className="Header-right">
-        <FiMenu className="Menu-icon" style={{ color: iconColor }} />
+        <FiMenu className="Menu-icon" style={{ color: iconColors }} />
       </div>
     </div>
   );
