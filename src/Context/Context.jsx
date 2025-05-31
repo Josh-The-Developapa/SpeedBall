@@ -1,16 +1,18 @@
 import { createContext } from "react";
 
-const Context = createContext({
+export const Context = createContext({
+  // Changed to named export
   isDrop: false,
   modal: false,
   animateCart: false,
   contactCard: false,
-  cartItems: [], // Added cartItems to context
+  cartItems: [],
   setContactCard: () => {},
   setModalVal: () => {},
   setIsDropVal: () => {},
   setAnimateCart: () => {},
-  setCartItems: () => {}, // Added setter for cart items
+  setCartItems: () => {},
 });
 
+// Keep default export if needed elsewhere
 export default Context;
