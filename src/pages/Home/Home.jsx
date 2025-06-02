@@ -59,6 +59,7 @@ function Home() {
       <div className="SB-text-container">
         <div className="SB-text-div">
           <div className="speedball-text" />
+          {/* go to products (either same or external page) */}
           <button className="button">Shop Apparel</button>
         </div>
       </div>
