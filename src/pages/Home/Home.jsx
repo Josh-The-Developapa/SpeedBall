@@ -18,6 +18,9 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
+//React Router imports
+import { Link } from 'react-router-dom';
+
 function Home() {
   return (
     <div className="Body-container">
@@ -29,7 +32,9 @@ function Home() {
       <div className="SB-text-container">
         <div className="SB-text-div">
           <div className="speedball-text" />
-          <button className="button">Shop Apparel</button>
+          <button className="button" id="shop-button">
+            Shop Apparel
+          </button>
         </div>
       </div>
 
@@ -61,7 +66,10 @@ function Home() {
               product="Denim Campaign Jacket"
               price="UGX 45,000"
               image={Product2}
-              image_dimensions={{ height: 'auto', width: '100%' }}
+              image_dimensions={{
+                height: '100%',
+                width: '100%',
+              }}
             />
           </SwiperSlide>
 
@@ -93,7 +101,9 @@ function Home() {
               who move against the grain, challenge norms, and carve out their
               own space in the world.
             </p>
-            <button className="button">ABOUT US</button>
+            <Link to="/about" className="button">
+              ABOUT US
+            </Link>
           </div>
         </div>
       </div>
