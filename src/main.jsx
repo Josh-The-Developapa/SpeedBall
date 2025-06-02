@@ -8,6 +8,11 @@ import {
 } from 'react-router-dom';
 import Home from './pages/Home/Home.jsx';
 import About from './pages/About/About.jsx';
+import ContextProvider from './Context/ContextProvider.jsx';
+import Shop from './pages/Shop/Shop.jsx';
+import Cart from './pages/Cart/Cart.jsx';
+import Product from './pages/Product/Product.jsx';
+import Events from './pages/Events/Events.jsx';
 
 const router = createBrowserRouter([
   {
@@ -22,10 +27,28 @@ const router = createBrowserRouter([
     path: '/about',
     element: <About />,
   },
+  {
+    path: '/shop',
+    element: <Shop />,
+  },
+  {
+    path: '/cart',
+    element: <Cart />,
+  },
+  {
+    path: '/product/:product',
+    element: <Product />,
+  },
+  {
+    path: '/events',
+    element: <Events />,
+  },
 ]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ContextProvider>
+      <RouterProvider router={router} />
+    </ContextProvider>
   </StrictMode>
 );
