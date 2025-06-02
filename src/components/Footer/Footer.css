@@ -7,6 +7,9 @@ footer {
   font-size: 0.875rem; /* text-sm */
   gap: 1.5rem; /* gap-6 */
   background-color: black;
+  position: relative;
+  bottom: 0;
+  left: 0;
 }
 
 /* Social Media Section */
@@ -93,6 +96,6 @@ footer > div:last-child > p:last-child {
   }
 }
 
-.social-icon {
+.social-icon:hover {
   border: 2px solid white;
 }
