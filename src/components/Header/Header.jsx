@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import './Header.css';
-// import SB_Logo from '../../assets/SPEEBALL/logo/sb-icon.svg'; // Not used, can be removed
 import { FiMenu } from 'react-icons/fi';
-import { useLocation, NavLink } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
+import Context from '../../Context/Context';
+import DropDown from '../DropDown/DropDown';
 
 function Header() {
+  const context = useContext(Context);
   const location = useLocation();
+  const [isAbout, setIsAbout] = useState(location.pathname == '/about');
 
   // Initialize colors based on the current path immediately
-  const initialIconColor = location.pathname === '/' ? '#000000' : '#000000';
+  const initialIconColor = location.pathname === '/' ? '#000000' : '#ffffff';
   const [iconColors, setIconColors] = useState(initialIconColor);
 
   // Logo is always displayed on all pages by default
@@ -20,8 +23,8 @@ function Header() {
   const SB_Header_SVG = () => {
     return (
       <svg
-        width="110"
-        height="110"
+        width="90"
+        height="70"
         viewBox="0 0 64 25"
         fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
@@ -58,41 +61,68 @@ function Header() {
   };
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (location.pathname === '/') {
-        // Only apply scroll logic on the homepage
-        if (window.scrollY > 0.9 * window.innerHeight) {
-          setIconColors('#ffffff'); // White on scroll down
+    const handleScrollResize = () => {
+      const isHome = location.pathname === '/';
+      const isAbout = location.pathname === '/about';
+      const isEvents = location.pathname === '/events';
+      const isShop = location.pathname === '/shop';
+      const isProduct = location.pathname.includes('/product');
+      const scrollY = window.scrollY;
+      const screenHeight = window.innerHeight;
+      const scrolledPast30vh = scrollY > screenHeight * 0.3;
+      const screenWidth = window.innerWidth;
+
+      if (isHome) {
+        if (scrolledPast30vh) {
+          // Regardless of width, always white
           setLogoDisplay('block');
+          setIconColors('#ffffff');
         } else {
-          setLogoDisplay('none');
-          setIconColors('#000000'); // Black initially/on scroll up
+          if (screenWidth < 390) {
+            // Less than 90vh AND small screen
+            setLogoDisplay('block');
+            setIconColors('#000000');
+          } else {
+            setLogoDisplay('none');
+            setIconColors('#000000');
+          }
         }
-      } else {
-        // For all other pages (e.g., /about), ensure it's always black and visible
-        setIconColors('#000000');
+      } else if (isAbout || isEvents || isShop) {
         setLogoDisplay('block');
+        setIconColors('#ffffff');
+      } else if (isProduct) {
+        setLogoDisplay('block');
+        setIconColors('#000000');
       }
     };
 
-    // Call handleScroll once on component mount to set initial state correctly
-    handleScroll();
+    // Attach listeners
+    window.addEventListener('scroll', handleScrollResize);
+    window.addEventListener('resize', handleScrollResize);
 
-    window.addEventListener('scroll', handleScroll);
+    // Initial check on mount
+    handleScrollResize();
 
-    // Cleanup the event listener when the component unmounts
+    // Cleanup
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScrollResize);
+      window.removeEventListener('resize', handleScrollResize);
     };
-  }, [location.pathname]); // Re-run effect if the path changes
+  }, [location, window.scrollY, window.innerWidth]);
 
   return (
-    <div className="Header">
+    <div className="Header" style={{ backgroundColor: isAbout ? 'black' : '' }}>
+      <div
+        className="backdrop"
+        style={{ display: context.isDrop ? 'block' : 'none' }}
+        onClick={() => {
+          context.setIsDropVal(false);
+        }}
+      ></div>
       <div
         style={{
           width: '50%',
           height: '100%',
-          paddingLeft: '15px',
           display: 'flex',
           justifyContent: 'flex-start',
           alignItems: 'center',
@@ -100,18 +130,36 @@ function Header() {
         }}
       >
         {/* Logo is always displayed, its color is managed by iconColors */}
-        <div style={{ display: logoDisplay }}>
-          <NavLink to="/">
-            <SB_Header_SVG
-              className="SB-Logo-Header"
-              style={{ display: logoDisplay }}
-            />
-          </NavLink>
+        <div
+          style={{
+            display: logoDisplay === 'none' ? 'none' : 'flex',
+            height: '100px',
+            width: '200px',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            marginLeft: '20px',
+          }}
+          className="sb-logo-div"
+        >
+          <Link to="/">
+            <SB_Header_SVG />
+          </Link>
         </div>
       </div>
       <div className="Header-right">
-        <FiMenu className="Menu-icon" style={{ color: iconColors }} />
-        <FiMenu className="Menu-icon" style={{ color: iconColors }} />
+        <DropDown />
+        <FiMenu
+          className="Menu-icon"
+          style={{
+            color:
+              context.isDrop || isAbout ? '#ffffff' : iconColors ?? '#000000',
+            transition: 'transform 0.3s ease',
+            transform: context.isDrop ? 'rotate(90deg)' : 'rotate(0deg)',
+          }}
+          onClick={() => {
+            context.setIsDropVal(!context.isDrop);
+          }}
+        />
       </div>
     </div>
   );
