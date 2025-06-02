@@ -1,21 +1,30 @@
-import React, { useEffect, useState } from "react";
-import "./Header.css";
-import SB_Logo from "../../assets/SPEEBALL/logo/sb-icon.svg";
-import { FiMenu } from "react-icons/fi";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState, useContext } from 'react';
+import './Header.css';
+import { FiMenu } from 'react-icons/fi';
+import { useLocation, Link } from 'react-router-dom';
+import Context from '../../Context/Context';
+import DropDown from '../DropDown/DropDown';
 
 function Header() {
-  const [iconColors, setIconColors] = useState("#000000");
+  const context = useContext(Context);
   const location = useLocation();
-  const [logoDisplay, setLogoDisplay] = useState(
-    "block" ? location.pathname === "/about" : "none"
-  );
+  const [isAbout, setIsAbout] = useState(location.pathname == '/about');
+
+  // Initialize colors based on the current path immediately
+  const initialIconColor = location.pathname === '/' ? '#000000' : '#ffffff';
+  const [iconColors, setIconColors] = useState(initialIconColor);
+
+  // Logo is always displayed on all pages by default
+  const [logoDisplay, setLogoDisplay] = useState('none');
+
+  // Menu color state (though it seems tied to iconColors in your current setup)
+  const [menuColor, setMenuColor] = useState('#ffffff'); // Keep this if menu color can be different
 
   const SB_Header_SVG = () => {
     return (
       <svg
-        width="110"
-        height="110"
+        width="90"
+        height="70"
         viewBox="0 0 64 25"
         fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
@@ -52,31 +61,105 @@ function Header() {
   };
 
   useEffect(() => {
-    window.addEventListener("scroll", () => {
-      if (location.pathname == "/") {
-        if (window.scrollY > 0.9 * window.innerHeight) {
-          setLogoDisplay("block");
-          setIconColors("#ffffff");
+    const handleScrollResize = () => {
+      const isHome = location.pathname === '/';
+      const isAbout = location.pathname === '/about';
+      const isEvents = location.pathname === '/events';
+      const isShop = location.pathname === '/shop';
+      const isProduct = location.pathname.includes('/product');
+      const scrollY = window.scrollY;
+      const screenHeight = window.innerHeight;
+      const scrolledPast30vh = scrollY > screenHeight * 0.3;
+      const screenWidth = window.innerWidth;
+
+      if (isHome) {
+        if (scrolledPast30vh) {
+          // Regardless of width, always white
+          setLogoDisplay('block');
+          setIconColors('#ffffff');
         } else {
-          setLogoDisplay("none");
-          setIconColors("#000000");
+          if (screenWidth < 390) {
+            // Less than 90vh AND small screen
+            setLogoDisplay('block');
+            setIconColors('#000000');
+          } else {
+            setLogoDisplay('none');
+            setIconColors('#000000');
+          }
         }
-      } else {
-        setLogoDisplay("block");
-        setIconColors("#000000");
+      } else if (isAbout || isEvents || isShop) {
+        setLogoDisplay('block');
+        setIconColors('#ffffff');
+      } else if (isProduct) {
+        setLogoDisplay('block');
+        setIconColors('#000000');
       }
-    });
-  }, []);
+    };
+
+    // Attach listeners
+    window.addEventListener('scroll', handleScrollResize);
+    window.addEventListener('resize', handleScrollResize);
+
+    // Initial check on mount
+    handleScrollResize();
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('scroll', handleScrollResize);
+      window.removeEventListener('resize', handleScrollResize);
+    };
+  }, [location, window.scrollY, window.innerWidth]);
 
   return (
-    <div className="Header">
-      <div className="Header-left">
-        {logoDisplay && (
-          <SB_Header_SVG className="SB-Logo-Header" fill={iconColors} />
-        )}
+    <div className="Header" style={{ backgroundColor: isAbout ? 'black' : '' }}>
+      <div
+        className="backdrop"
+        style={{ display: context.isDrop ? 'block' : 'none' }}
+        onClick={() => {
+          context.setIsDropVal(false);
+        }}
+      ></div>
+      <div
+        style={{
+          width: '50%',
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          paddingTop: 0,
+        }}
+      >
+        {/* Logo is always displayed, its color is managed by iconColors */}
+        <div
+          style={{
+            display: logoDisplay === 'none' ? 'none' : 'flex',
+            height: '100px',
+            width: '200px',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            marginLeft: '20px',
+          }}
+          className="sb-logo-div"
+        >
+          <Link to="/">
+            <SB_Header_SVG />
+          </Link>
+        </div>
       </div>
       <div className="Header-right">
-        <FiMenu className="Menu-icon" style={{ color: iconColors }} />
+        <DropDown />
+        <FiMenu
+          className="Menu-icon"
+          style={{
+            color:
+              context.isDrop || isAbout ? '#ffffff' : iconColors ?? '#000000',
+            transition: 'transform 0.3s ease',
+            transform: context.isDrop ? 'rotate(90deg)' : 'rotate(0deg)',
+          }}
+          onClick={() => {
+            context.setIsDropVal(!context.isDrop);
+          }}
+        />
       </div>
     </div>
   );

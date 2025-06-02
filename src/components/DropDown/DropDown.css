@@ -1,0 +1,93 @@
+/* DropDown.css */
+@keyframes slideDownFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideUpFade {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+}
+
+.dropdown {
+  height: 350px;
+  width: 250px;
+  background-color: #232527;
+  z-index: 0;
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  pointer-events: auto;
+}
+
+.dropdown.show {
+  animation: slideDownFade 0.3s ease forwards;
+}
+
+.dropdown.hide {
+  animation: slideUpFade 0.3s ease forwards;
+}
+
+.navlink,
+.active {
+  position: relative;
+  color: #ffffff;
+  text-decoration: none;
+  margin: 10px 0;
+  font-size: 1.1rem;
+  padding-bottom: 3px;
+  transition: color 0.3s ease;
+  margin-left: 50px;
+}
+
+.navlink::after,
+.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background-color: #ffffff;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.navlink:hover::after {
+  transform: scaleX(1);
+}
+
+.active::after {
+  transform: scaleX(1);
+}
+
+@media screen and (max-width: 500px) {
+  .dropdown {
+    width: 100vw;
+    right: 0;
+    top: 0;
+    justify-content: center;
+    align-items: center;
+  }
+  .navlink,
+  .active {
+    margin-left: 0;
+  }
+}

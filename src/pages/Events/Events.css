@@ -1,0 +1,94 @@
+.events-hero {
+  background-image: url('../../assets/events-hero.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.events-icon {
+  background-image: url('../../assets/event-icon.svg');
+  height: 280px;
+  width: 450px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  margin-bottom: 20px;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.events-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.events-body-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+}
+
+.events-text-block {
+  position: absolute;
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 100;
+}
+
+.events-button {
+  background-color: #ffffff;
+  color: #000000;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+#buy-tickets-button {
+  margin-right: 25px;
+}
+
+#shop-merch-button {
+  background-color: #385b5d;
+  color: #ffffff;
+}
+
+.events-button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 460px) {
+  .events-icon {
+    height: 200px;
+    width: 280px;
+  }
+  .events-button {
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 15px;
+  }
+
+  #buy-tickets-button {
+    margin-right: 15px;
+  }
+}

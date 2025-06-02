@@ -12,12 +12,15 @@ import Product1 from "../../assets/full-fit.svg";
 import Product2 from "../../assets/jacket.svg";
 import Product3 from "../../assets/denim-jeans.svg";
 
-// Swiper
+// Swiper stuff
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+
+//React Router imports
+import { Link } from "react-router-dom";
 
 function Home() {
   const ctx = useContext(Context);
@@ -59,8 +62,9 @@ function Home() {
       <div className="SB-text-container">
         <div className="SB-text-div">
           <div className="speedball-text" />
-          {/* go to products (either same or external page) */}
-          <button className="button">Shop Apparel</button>
+          <button className="button" id="shop-button">
+            Shop Apparel
+          </button>
         </div>
       </div>
 
@@ -108,7 +112,9 @@ function Home() {
               who move against the grain, challenge norms, and carve out their
               own space in the world.
             </p>
-            <button className="button">ABOUT US</button>
+            <Link to="/about" className="button">
+              ABOUT US
+            </Link>
           </div>
         </div>
       </div>
