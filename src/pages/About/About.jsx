@@ -1,6 +1,6 @@
-import hero from '../../assets/about-hero.svg';
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+import hero from "../../assets/about-hero.svg";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
 
 export default function AboutPage() {
   return (
@@ -30,15 +30,30 @@ export default function AboutPage() {
             underground, where sound, sweat, and subversion converge. Born at
             the intersection of street culture and postcolonial expression, our
             garments are more than attire. They are urban artifacts shaped by
-            the chaos and clarity of the modern African metropolis.
+            the chaos and clarity of the modern African metropolis. Every
+            collection emerges from a deep cultural dialogue, merging tailored
+            rebellion with regional nuance to articulate a new language of
+            style.
           </p>
 
-          <p>
+          <p className="mb-6">
             Each drop is a study in contrast. Raw materials meet refined
             craftsmanship, while traditional silhouettes are deconstructed into
             statements of identity. From limited-edition denim programs to
-            collaborations with East African artists, Speedball reimagines
-            streetwear as an evolving medium.
+            interdisciplinary collaborations with East African artists,
+            Speedball reimagines streetwear as an evolving medium. We design for
+            those who shape culture from the margins: boundary-pushers,
+            nightlife architects, and city-dwellers who treat movement as
+            performance.
+          </p>
+
+          <p className="mb-6">
+            Beyond the garment, Speedball functions as a cultural engine. We
+            curate events, incubate local talent, and redefine how African
+            cities express themselves through fashion. We are not building a
+            brand. We are shaping a visual vocabulary for a generation that
+            refuses to be framed. In every thread, conviction. In every
+            silhouette, a manifesto.
           </p>
         </div>
       </section>
