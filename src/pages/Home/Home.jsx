@@ -10,7 +10,7 @@ import ProductCard from "../../components/ProductCard/ProductCard";
 // Assets
 import Product1 from "../../assets/full-fit.svg";
 import Product2 from "../../assets/jacket.svg";
-import Product3 from "../../assets/denim-jeans.svg";
+import Product3 from "../../assets/jeans.svg";
 
 // Swiper stuff
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -32,7 +32,7 @@ function Home() {
       price: 45000,
       image: Product1,
       sizes: ["M", "L", "XL"],
-      hoverPic: Product1, // Add alternative image if available
+      hoverPic: Product1,
     },
     {
       id: 2,
@@ -88,7 +88,7 @@ function Home() {
             <SwiperSlide key={product.id}>
               <ProductCard
                 product={product.name}
-                price={`UGX ${product.price.toLocaleString("en-US")}`}
+                price={`${product.price.toLocaleString("en-US")}`}
                 image={product.image}
                 hoverPic={product.hoverPic}
                 image_dimensions={product.imageDimensions}
