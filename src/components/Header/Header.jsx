@@ -66,6 +66,7 @@ function Header() {
       const isAbout = location.pathname === '/about';
       const isEvents = location.pathname === '/events';
       const isShop = location.pathname === '/shop';
+      const isCart = location.pathname === '/cart';
       const isProduct = location.pathname.includes('/product');
       const scrollY = window.scrollY;
       const screenHeight = window.innerHeight;
@@ -90,7 +91,7 @@ function Header() {
       } else if (isAbout || isEvents || isShop) {
         setLogoDisplay('block');
         setIconColors('#ffffff');
-      } else if (isProduct) {
+      } else if (isProduct || isCart) {
         setLogoDisplay('block');
         setIconColors('#000000');
       }

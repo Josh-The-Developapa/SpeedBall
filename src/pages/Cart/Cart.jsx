@@ -1,17 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
-import Context from "../../Context/Context.jsx";
-import { IoMdTrash, IoMdArrowBack } from "react-icons/io";
-import { FiCheckCircle } from "react-icons/fi";
-import { ImSpinner9 } from "react-icons/im";
-import { IoIosAddCircle } from "react-icons/io";
-import { IoMdArrowDropupCircle } from "react-icons/io";
-import hero from "../../assets/speedball-homepage-laptop.jpeg";
-import Header from "../../components/Header/Header.jsx";
-import Footer from "../../components/Footer/Footer.jsx";
+import React, { useContext, useEffect, useState } from 'react';
+import Context from '../../Context/Context.jsx';
+import { IoMdTrash, IoMdArrowBack } from 'react-icons/io';
+import { FiCheckCircle } from 'react-icons/fi';
+import { ImSpinner9 } from 'react-icons/im';
+import { IoIosAddCircle } from 'react-icons/io';
+import { IoMdArrowDropupCircle } from 'react-icons/io';
+import hero from '../../assets/speedball-homepage-laptop.jpeg';
+import Header from '../../components/Header/Header.jsx';
+import Footer from '../../components/Footer/Footer.jsx';
 
-import Product1 from "../../assets/full-fit.svg";
-import Product2 from "../../assets/jacket.svg";
-import Product3 from "../../assets/jeans.svg";
+import Product1 from '../../assets/full-fit.svg';
+import Product2 from '../../assets/jacket.svg';
+import Product3 from '../../assets/jeans.svg';
 
 function CartPage() {
   // const ctx = useContext(Context);
@@ -20,44 +20,46 @@ function CartPage() {
   const [loading, setLoading] = useState(false);
   const [showCheckoutOverlay, setShowCheckoutOverlay] = useState(false);
   const [showAddressOverlay, setShowAddressOverlay] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const [checkoutComplete, setCheckoutComplete] = useState(false);
   const [addressExpanded, setAddressExpanded] = useState(false);
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState('');
   const [address, setAddress] = useState({
-    fullName: "",
-    cityTown: "",
-    street: "",
-    country: "Uganda",
-    phoneNumber: "",
+    fullName: '',
+    cityTown: '',
+    street: '',
+    country: 'Uganda',
+    phoneNumber: '',
     date: date,
   });
 
   useEffect(() => {
-    if (!localStorage.getItem("CartItems")) return;
-    setCartItems(JSON.parse(localStorage.getItem("CartItems")));
+    if (!localStorage.getItem('CartItems')) return;
+    setCartItems(JSON.parse(localStorage.getItem('CartItems')));
   }, []);
 
   const handleQuantityChange = (index, newQuantity) => {
+    if (newQuantity < 1) return; // prevent zero or negative quantities
+
     const updatedCartItems = [...cartItems];
     updatedCartItems[index].quantity = newQuantity;
     setCartItems(updatedCartItems);
-    localStorage.setItem("CartItems", JSON.stringify(updatedCartItems));
+    localStorage.setItem('CartItems', JSON.stringify(updatedCartItems));
   };
 
   const handleSizeChange = (index, newSize) => {
     const updatedCartItems = [...cartItems];
     updatedCartItems[index].size = newSize;
     setCartItems(updatedCartItems);
-    localStorage.setItem("CartItems", JSON.stringify(updatedCartItems));
+    localStorage.setItem('CartItems', JSON.stringify(updatedCartItems));
   };
 
   const handleDeleteItem = (index) => {
     const updatedCartItems = [...cartItems];
     updatedCartItems.splice(index, 1);
     setCartItems(updatedCartItems);
-    localStorage.setItem("CartItems", JSON.stringify(updatedCartItems));
+    localStorage.setItem('CartItems', JSON.stringify(updatedCartItems));
   };
 
   const computeCost = (array) => {
@@ -73,12 +75,12 @@ function CartPage() {
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
     setAddress({ ...address, [name]: value });
-    setError("");
+    setError('');
   };
 
   function handleFinalCheckout() {
     if (!address.fullName || !address.line || !address.phone) {
-      alert("Please complete all address fields.");
+      alert('Please complete all address fields.');
       return;
     }
 
@@ -90,7 +92,7 @@ function CartPage() {
   // whree the magic happens
   const handleCheckout = async () => {
     if (cartItems.length === 0) {
-      setError("Please add some items to cart first.");
+      setError('Please add some items to cart first.');
       return;
     }
 
@@ -103,23 +105,23 @@ function CartPage() {
       totalCost:
         computeCost(cartItems).totalCost * (1 - Number(discount) / 100),
       date: new Date(Date.now() + 3 * 3600 * 1000).toUTCString(), // EAT offset
-      status: "pending",
+      status: 'pending',
     };
 
-    fetch("https://conspiracy-67f09-default-rtdb.firebaseio.com/orders.json", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    fetch('https://conspiracy-67f09-default-rtdb.firebaseio.com/orders.json', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(checkoutData),
     })
       .then((res) => res.json())
       .then(() => {
         setCheckoutComplete(true);
         setCartItems([]);
-        localStorage.removeItem("CartItems");
+        localStorage.removeItem('CartItems');
         setShowAddressOverlay(false);
       })
       .catch((err) => {
-        console.error("Checkout Error:", err);
+        console.error('Checkout Error:', err);
       })
       .finally(() => {
         setLoading(false);
@@ -147,25 +149,32 @@ function CartPage() {
           </div>
 
           {/* Cart Items */}
-          <div className="flex-1 p-6 overflow-y-auto">
+          <div className="flex-1 xl:p-6 overflow-y-auto p-3">
             {cartItems.length > 0 ? (
               <div className="flex flex-wrap gap-4">
                 {cartItems.map((item, index) => (
                   <div
                     key={index}
-                    className="relative w-full md:w-[48%] bg-[#2a2a2a] border border-gray-600 py-5 px-4 flex items-center justify-between text-white min-h-[6.5rem]"
+                    className="relative w-full md:w-[350px] bg-[#2a2a2a] border border-gray-600 py-5 px-4 flex items-center justify-between text-white min-h-[9rem]"
                   >
                     <div className="flex items-center space-x-4">
                       <img
                         src={item.image}
-                        src={item.image}
                         alt={item.title}
-                        className="w-14 h-14 object-contain"
+                        className="w-20 h-20 object-contain"
                       />
                       <div className="flex flex-col justify-between">
-                        <h3 className="text-sm tracking-wide">{item.title}</h3>
-                        <p className="text-[0.975rem] font-medium">
-                          UGX {item.price.toLocaleString("en-UG")}
+                        <h3
+                          className="text-sm tracking-wide"
+                          style={{ marginBottom: '10px', marginRight: '5px' }}
+                        >
+                          {item.title}
+                        </h3>
+                        <p
+                          className="text-[0.975rem] font-medium"
+                          style={{ marginBottom: '10px' }}
+                        >
+                          UGX {item.price.toLocaleString('en-UG')}
                         </p>
                         <div className="flex items-center space-x-2 mt-1">
                           <button
@@ -276,11 +285,11 @@ function CartPage() {
               <div className="flex justify-between items-center text-lg">
                 <span className="font-semibold">Total</span>
                 <span className="font-bold">
-                  UGX{" "}
+                  UGX{' '}
                   {(
                     computeCost(cartItems).totalCost *
                     (1 - Number(discount) / 100)
-                  ).toLocaleString("en-US")}
+                  ).toLocaleString('en-US')}
                 </span>
               </div>
             </div>
@@ -295,7 +304,7 @@ function CartPage() {
                   {loading ? (
                     <ImSpinner9 className="w-6 h-6 animate-spin" />
                   ) : (
-                    "CHECKOUT"
+                    'CHECKOUT'
                   )}
                 </button>
                 <button className="text-white flex-1 px-6 py-4 border border-gray-300 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors">
