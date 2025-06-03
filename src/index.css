@@ -47,8 +47,8 @@ h1 {
 }
 
 button {
-  border-radius: 0;
-  border: 1px solid transparent;
+  border: none;
+  border-radius: 5px;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
@@ -58,12 +58,12 @@ button {
   transition: all 0.25s; /* Changed to transition all properties */
 }
 
-button:hover {
-  border-color: white; /* White outline on hover */
-  box-shadow: 0 0 0 2px white; /* Adds white glow effect */
-}
+/* button:hover {
+  border-color: white; White outline on hover 
+  box-shadow: 0 0 0 2px white;  Adds white glow effect 
+} */
 
-button:focus,
+/* button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
+} */

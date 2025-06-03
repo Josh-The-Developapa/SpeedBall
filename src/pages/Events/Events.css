@@ -59,6 +59,13 @@
   padding-right: 30px;
   padding-top: 10px;
   padding-bottom: 10px;
+  border-radius: 5px;
+}
+
+.events-button:hover{
+  border: none;
+  background-color: #000000;
+  color: #fff;
 }
 
 #buy-tickets-button {
@@ -68,6 +75,10 @@
 #shop-merch-button {
   background-color: #385b5d;
   color: #ffffff;
+}
+
+#shop-merch-button:hover{
+  background-color: #000000;
 }
 
 .events-button-container {

@@ -34,6 +34,10 @@
   background-color: #283274;
 }
 
+.cart-button:hover{
+  background-color: black;
+}
+
 .sizes {
   width: 50px;
   display: flex;
