@@ -40,6 +40,8 @@ function CartPage() {
   }, []);
 
   const handleQuantityChange = (index, newQuantity) => {
+    if (newQuantity < 1) return; // prevent zero or negative quantities
+
     const updatedCartItems = [...cartItems];
     updatedCartItems[index].quantity = newQuantity;
     setCartItems(updatedCartItems);
