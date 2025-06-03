@@ -1,68 +1,81 @@
-import React, { useContext, useEffect, useState } from 'react';
-import Context from '../../Context/Context.jsx';
-import { IoMdTrash, IoMdArrowBack } from 'react-icons/io';
-import { FiCheckCircle } from 'react-icons/fi';
-import { ImSpinner9 } from 'react-icons/im';
-import { IoIosAddCircle } from 'react-icons/io';
-import { IoMdArrowDropupCircle } from 'react-icons/io';
-import hero from '../../assets/speedball-homepage-laptop.jpeg';
-import Header from '../../components/Header/Header.jsx';
-import Footer from '../../components/Footer/Footer.jsx';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { FiCheckCircle } from "react-icons/fi";
+import { ImSpinner9 } from "react-icons/im";
+import hero from "../../assets/speedball-homepage-laptop.jpeg";
+import Header from "../../components/Header/Header.jsx";
+import Footer from "../../components/Footer/Footer.jsx";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
-import Product1 from '../../assets/full-fit.svg';
-import Product2 from '../../assets/jacket.svg';
-import Product3 from '../../assets/jeans.svg';
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
 
 function CartPage() {
-  // const ctx = useContext(Context);
   const [cartItems, setCartItems] = useState([]);
-  const [discount, setDiscount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [showCheckoutOverlay, setShowCheckoutOverlay] = useState(false);
   const [showAddressOverlay, setShowAddressOverlay] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+
+  const [showPaymentModal, setShowPaymentModal] = useState(() => {
+    return localStorage.getItem("PaymentModalState") === "open";
+  });
 
   const [checkoutComplete, setCheckoutComplete] = useState(false);
-  const [addressExpanded, setAddressExpanded] = useState(false);
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState("");
   const [address, setAddress] = useState({
-    fullName: '',
-    cityTown: '',
-    street: '',
-    country: 'Uganda',
-    phoneNumber: '',
+    fullName: "",
+    cityTown: "",
+    street: "",
+    country: "Uganda",
+    phoneNumber: "",
     date: date,
   });
 
+  function formatPhoneNumber(raw) {
+    if (!raw) return "";
+
+    const parsed = parsePhoneNumberFromString(raw, "UG"); // fallback region if country code is missing
+    if (!parsed.isValid()) {
+      setError("Please enter a valid phone number.");
+      return;
+    }
+    if (!parsed || !parsed.isValid()) return raw;
+
+    return parsed.formatInternational(); // e.g. +256 712 345 678
+  }
+
   useEffect(() => {
-    if (!localStorage.getItem('CartItems')) return;
-    setCartItems(JSON.parse(localStorage.getItem('CartItems')));
+    const storedCart = localStorage.getItem("CartItems");
+    if (storedCart) {
+      setCartItems(JSON.parse(storedCart));
+    }
+
+    if (localStorage.getItem("PaymentModalState") === "open") {
+      setShowPaymentModal(true);
+    }
   }, []);
 
   const handleQuantityChange = (index, newQuantity) => {
-    if (newQuantity < 1) return; // prevent zero or negative quantities
+    if (newQuantity < 1) return; // prevent non positive quantities
 
     const updatedCartItems = [...cartItems];
     updatedCartItems[index].quantity = newQuantity;
     setCartItems(updatedCartItems);
-    localStorage.setItem('CartItems', JSON.stringify(updatedCartItems));
-  };
-
-  const handleSizeChange = (index, newSize) => {
-    const updatedCartItems = [...cartItems];
-    updatedCartItems[index].size = newSize;
-    setCartItems(updatedCartItems);
-    localStorage.setItem('CartItems', JSON.stringify(updatedCartItems));
+    localStorage.setItem("CartItems", JSON.stringify(updatedCartItems));
   };
 
   const handleDeleteItem = (index) => {
     const updatedCartItems = [...cartItems];
     updatedCartItems.splice(index, 1);
     setCartItems(updatedCartItems);
-    localStorage.setItem('CartItems', JSON.stringify(updatedCartItems));
+    localStorage.setItem("CartItems", JSON.stringify(updatedCartItems));
   };
 
-  const computeCost = (array) => {
+  const computeTotals = (array) => {
     let totalQuantity = 0;
     let totalCost = 0;
     array.forEach((item) => {
@@ -72,60 +85,59 @@ function CartPage() {
     return { totalQuantity, totalCost };
   };
 
+  const handleClosePaymentModal = () => {
+    if (
+      !window.confirm(
+        "Are you sure you want to close this screen? Payment may be missed."
+      )
+    )
+      return;
+    setShowPaymentModal(false);
+    localStorage.removeItem("PaymentModalState");
+  };
+
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
     setAddress({ ...address, [name]: value });
-    setError('');
+    setError("");
   };
 
-  function handleFinalCheckout() {
-    if (!address.fullName || !address.line || !address.phone) {
-      alert('Please complete all address fields.');
-      return;
-    }
-
-    sendOrderToServer({ cartItems, address }); // or Supabase insert
-    setCartItems([]);
-    setShowCheckoutOverlay(false);
-  }
-
-  // whree the magic happens
+  // where the magic happens
   const handleCheckout = async () => {
     if (cartItems.length === 0) {
-      setError('Please add some items to cart first.');
+      setError("Please add some items to cart first.");
       return;
     }
+
+    const { totalQuantity, totalCost } = computeTotals(cartItems);
+    const delivery_address = `${address.fullName}, ${address.street}, ${address.cityTown}, ${address.country}`;
+    const phone_number = address.phoneNumber;
 
     setLoading(true);
 
-    const checkoutData = {
-      cartItems,
-      address,
-      totalShirts: computeCost(cartItems).totalQuantity,
-      totalCost:
-        computeCost(cartItems).totalCost * (1 - Number(discount) / 100),
-      date: new Date(Date.now() + 3 * 3600 * 1000).toUTCString(), // EAT offset
-      status: 'pending',
-    };
+    const { error } = await supabase.from("orders").insert([
+      {
+        items: cartItems,
+        total_quantity: totalQuantity,
+        total_cost: totalCost,
+        delivery_address,
+        phone_number,
+      },
+    ]);
 
-    fetch('https://conspiracy-67f09-default-rtdb.firebaseio.com/orders.json', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(checkoutData),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        setCheckoutComplete(true);
-        setCartItems([]);
-        localStorage.removeItem('CartItems');
-        setShowAddressOverlay(false);
-      })
-      .catch((err) => {
-        console.error('Checkout Error:', err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    if (error) {
+      console.error("Supabase Insert Error:", error.message);
+      setError("Something went wrong. Please try again.");
+    } else {
+      localStorage.setItem("PaymentModalState", "open");
+      setShowPaymentModal(true);
+      setCheckoutComplete(true);
+      setCartItems([]);
+      localStorage.removeItem("CartItems");
+      setShowAddressOverlay(false);
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -166,15 +178,15 @@ function CartPage() {
                       <div className="flex flex-col justify-between">
                         <h3
                           className="text-sm tracking-wide"
-                          style={{ marginBottom: '10px', marginRight: '5px' }}
+                          style={{ marginBottom: "10px", marginRight: "5px" }}
                         >
                           {item.title}
                         </h3>
                         <p
                           className="text-[0.975rem] font-medium"
-                          style={{ marginBottom: '10px' }}
+                          style={{ marginBottom: "10px" }}
                         >
-                          UGX {item.price.toLocaleString('en-UG')}
+                          UGX {item.price.toLocaleString("en-UG")}
                         </p>
                         <div className="flex items-center space-x-2 mt-1">
                           <button
@@ -227,94 +239,160 @@ function CartPage() {
           {/* Checkout Section */}
           <div className="bg-white text-black p-6">
             {/* Address Section */}
-            <div className="mb-6">
-              <div className="flex items-center mb-4">
-                <h3 className="text-lg font-semibold">Add Delivery Address</h3>
-                <button
-                  onClick={() => setAddressExpanded(!addressExpanded)}
-                  className="ml-3 text-black hover:text-gray-600 transition-colors"
-                >
-                  {addressExpanded ? (
-                    <IoMdArrowDropupCircle className="w-8 h-8" />
-                  ) : (
-                    <IoIosAddCircle className="w-8 h-8" />
-                  )}
-                </button>
-              </div>
-
-              {addressExpanded && (
-                <div className="space-y-3">
-                  <input
-                    type="text"
-                    name="fullName"
-                    placeholder="Full Name"
-                    value={address.fullName}
-                    onChange={handleAddressChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
-                  />
-                  <input
-                    type="text"
-                    name="cityTown"
-                    placeholder="City or Town"
-                    value={address.cityTown}
-                    onChange={handleAddressChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
-                  />
-                  <input
-                    type="text"
-                    name="street"
-                    placeholder="Street"
-                    value={address.street}
-                    onChange={handleAddressChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
-                  />
-                  <input
-                    type="tel"
-                    name="phoneNumber"
-                    placeholder="Phone Number"
-                    value={address.phoneNumber}
-                    onChange={handleAddressChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
-                  />
+            {showAddressOverlay && (
+              <div className="fixed inset-0 bg-black bg-opacity-20 z-50 flex items-center justify-center">
+                <div className="bg-white text-black rounded-lg p-6 w-[90%] max-w-md relative">
+                  <button
+                    onClick={() => setShowAddressOverlay(false)}
+                    className="absolute top-2 right-2 text-gray-600 hover:text-black text-xl"
+                  >
+                    ×
+                  </button>
+                  <h3 className="text-lg font-semibold mb-4">
+                    Add Delivery Address
+                  </h3>
+                  <div className="space-y-3">
+                    <input
+                      type="text"
+                      name="fullName"
+                      placeholder="Full Name"
+                      value={address.fullName}
+                      onChange={handleAddressChange}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
+                    />
+                    <input
+                      type="text"
+                      name="cityTown"
+                      placeholder="City or Town"
+                      value={address.cityTown}
+                      onChange={handleAddressChange}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
+                    />
+                    <input
+                      type="text"
+                      name="street"
+                      placeholder="Street"
+                      value={address.street}
+                      onChange={handleAddressChange}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
+                    />
+                    <input
+                      type="tel"
+                      inputMode="tel"
+                      pattern="[\d\s()+-]*"
+                      name="phoneNumber"
+                      placeholder="Phone Number"
+                      value={address.phoneNumber}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        // Allow digits, +, -, space, (, )
+                        if (/^[\d\s()+-]*$/.test(val)) {
+                          setAddress({ ...address, phoneNumber: val });
+                        }
+                      }}
+                      onPaste={(e) => {
+                        const paste = e.clipboardData.getData("text");
+                        if (!/^[\d\s()+-]*$/.test(paste)) e.preventDefault();
+                      }}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
+                    />
+                    <button
+                      onClick={handleCheckout}
+                      className="w-full mt-4 bg-[#3B4CCA] text-white py-3 rounded-lg font-semibold hover:bg-[#2A3BB7]"
+                    >
+                      CONFIRM & ORDER
+                    </button>
+                  </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
 
             {/* Total Section */}
-            <div className="mb-6 space-y-2">
-              <div className="flex justify-between items-center text-lg">
-                <span className="font-semibold">Total</span>
-                <span className="font-bold">
-                  UGX{' '}
-                  {(
-                    computeCost(cartItems).totalCost *
-                    (1 - Number(discount) / 100)
-                  ).toLocaleString('en-US')}
-                </span>
-              </div>
+            <div className="flex flex-col items-start text-lg space-y-1 pb-4">
+              <span className="font-semibold">Total</span>
+              <span className="text-2xl font-medium">
+                UGX {computeTotals(cartItems).totalCost.toLocaleString("en-UG")}
+              </span>
             </div>
 
             {/* Checkout Button */}
-            {!checkoutComplete ? (
-              <div className="flex gap-4">
+            <div className="flex gap-4">
+              {!checkoutComplete ? (
                 <button
-                  className="flex-1 px-6 py-4 bg-[#3B4CCA] text-white rounded-lg font-semibold text-lg hover:bg-[#2A3BB7] transition-colors flex items-center justify-center"
-                  onClick={() => setShowAddressOverlay(true)}
+                  className={`flex-1 px-6 py-4 rounded-lg font-semibold text-lg flex items-center justify-center transition-colors ${
+                    computeTotals(cartItems).totalCost > 0
+                      ? "bg-blue-700 text-white hover:bg-blue-800"
+                      : "bg-gray-400 text-gray-200 cursor-not-allowed"
+                  }`}
+                  onClick={() => {
+                    if (computeTotals(cartItems).totalCost > 0) {
+                      setShowAddressOverlay(true);
+                    }
+                  }}
+                  disabled={computeTotals(cartItems).totalCost <= 0}
                 >
                   {loading ? (
                     <ImSpinner9 className="w-6 h-6 animate-spin" />
                   ) : (
-                    'CHECKOUT'
+                    "CHECKOUT"
                   )}
                 </button>
-                <button className="text-white flex-1 px-6 py-4 border border-gray-300 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors">
+              ) : (
+                <div className="flex-1 bg-green-600 text-white py-4 px-6 rounded-lg font-semibold text-lg flex items-center justify-center">
+                  <FiCheckCircle className="w-5 h-5 mr-2 animate-pulse" />
+                  Order Sent
+                </div>
+              )}
+
+              <Link to="/shop" className="flex-1">
+                <button className="w-full px-6 py-4 bg-white text-white border border-gray-300 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors justify-center">
                   CONTINUE SHOPPING
                 </button>
-              </div>
-            ) : (
-              <div className="w-full bg-green-600 text-white py-4 px-6 rounded-lg font-semibold text-lg flex items-center justify-center">
-                <FiCheckCircle className="w-5 h-5 mr-2 animate-pulse" />
-                Order Sent
+              </Link>
+            </div>
+
+            {showPaymentModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-30 z-50 flex items-center justify-center">
+                <div className="bg-white text-black p-6 rounded-lg w-[90%] max-w-md relative">
+                  <button
+                    onClick={handleClosePaymentModal}
+                    className="absolute top-2 right-2 text-gray-600 hover:text-black text-xl"
+                  >
+                    ×
+                  </button>
+
+                  <h2 className="text-xl font-semibold mb-4">
+                    Order Confirmed
+                  </h2>
+
+                  <p className="mb-3 text-sm text-gray-800">
+                    A courier will call your number shortly to confirm your
+                    delivery address. <br />
+                    <strong>Please do not make any payment yet.</strong>
+                  </p>
+
+                  <p className="mb-2 text-sm text-gray-800">
+                    Once the courier arrives and confirms the delivery, pay{" "}
+                    <strong>only</strong> to the following numbers:
+                  </p>
+
+                  <ul className="mb-4 text-blue-700 font-bold text-lg space-y-1">
+                    <li>• +256 770 000000</li>
+                    <li>• +256 701 111111</li>
+                  </ul>
+
+                  <p className="mb-2 text-sm text-gray-800">
+                    Your contact number:
+                  </p>
+
+                  <div className="font-medium text-base text-gray-900 mb-4">
+                    {formatPhoneNumber(address.phoneNumber)}
+                  </div>
+
+                  <p className="text-xs text-gray-600">
+                    Keep this screen open until the call is complete.
+                  </p>
+                </div>
               </div>
             )}
           </div>

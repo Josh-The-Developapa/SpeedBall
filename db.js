@@ -1,6 +1,6 @@
-import postgres from 'postgres'
+import postgres from "postgres";
 
-const connectionString = process.env.DATABASE_URL
-const sql = postgres(connectionString)
+const connectionString = import.meta.env.VITE_SUPABASE_URL;
+const sql = postgres(connectionString);
 
-export default sql
+export default sql;
