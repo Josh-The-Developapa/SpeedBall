@@ -40,6 +40,8 @@ function CartPage() {
   }, []);
 
   const handleQuantityChange = (index, newQuantity) => {
+    if (newQuantity < 1) return; // prevent zero or negative quantities
+
     const updatedCartItems = [...cartItems];
     updatedCartItems[index].quantity = newQuantity;
     setCartItems(updatedCartItems);
@@ -157,7 +159,6 @@ function CartPage() {
                   >
                     <div className="flex items-center space-x-4">
                       <img
-                        src={item.image}
                         src={item.image}
                         alt={item.title}
                         className="w-14 h-14 object-contain"
