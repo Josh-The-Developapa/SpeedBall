@@ -7,8 +7,8 @@ export default defineConfig({
   server: {
     host: true,
     port: 5173,
-    open: true, // opens the browser automatically
-    strictPort: true, // throws error if port 5173 is in use
+    open: true,
+    strictPort: false,
     hmr: {
       protocol: "ws",
       host: "localhost",
