@@ -6,13 +6,7 @@ import hero from "../../assets/speedball-homepage-laptop.jpeg";
 import Header from "../../components/Header/Header.jsx";
 import Footer from "../../components/Footer/Footer.jsx";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
-
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
-);
+import { supabase } from "../../lib/supabaseClient";
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
