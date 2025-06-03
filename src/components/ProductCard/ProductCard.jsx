@@ -21,12 +21,20 @@ export default function ProductCard(props) {
       size: selectedSize || "Not selected",
     });
 
+    const sanitizedPrice = parseInt(
+      props.price
+        .toString()
+        .replace(/UGX\s*/gi, "") // Remove any "UGX" (case-insensitive) and following spaces
+        .replace(/[^0-9]/g, ""), // Remove any non-digit characters
+      10
+    );
+
     const product = {
       title: props.product,
-      price: props.price,
-      image: props.image,
+      price: sanitizedPrice,
+      image: props.image.split("?")[0],
       quantity: 1,
-      size: selectedSize || sizes[0], // Default to first size if none selected
+      size: selectedSize || sizes[0],
     };
 
     // Trigger cart animation
@@ -97,7 +105,9 @@ export default function ProductCard(props) {
       </h2>
 
       {/* Price */}
-      <p className="text-lg text-white-400 font-bold price">{props.price}</p>
+      <p className="text-lg text-white-400 font-bold price">
+        UGX {props.price}
+      </p>
 
       {/* Size Selection */}
       <div className="flex flex-wrap gap-2">
