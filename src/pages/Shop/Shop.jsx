@@ -1,21 +1,20 @@
-import React from 'react';
-import './Shop.css';
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+import React from "react";
+import "./Shop.css";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
 
-import ProductCard from '../../components/ProductCard/ProductCard';
+import ProductCard from "../../components/ProductCard/ProductCard";
 // Assets
-import Product1 from '../../assets/full-fit.svg';
-import Product2 from '../../assets/jacket.svg';
-import Product3 from '../../assets/denim-jeans.svg';
-import Product4 from '../../assets/jeans.svg';
+import Product1 from "../../assets/full-fit.svg";
+import Product2 from "../../assets/jacket.svg";
+import Product3 from "../../assets/jeans.svg";
 
 // Swiper stuff
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 function Shop() {
   return (
@@ -49,8 +48,8 @@ function Shop() {
               price="UGX 45,000"
               image={Product2}
               image_dimensions={{
-                height: '100%',
-                width: '100%',
+                height: "100%",
+                width: "100%",
               }}
             />
           </SwiperSlide>
@@ -61,9 +60,9 @@ function Shop() {
               price="UGX 45,000"
               image={Product3}
               image_dimensions={{
-                height: '100%',
-                width: '100%',
-                objectFit: 'cover',
+                height: "100%",
+                width: "100%",
+                objectFit: "cover",
               }}
             />
           </SwiperSlide>
