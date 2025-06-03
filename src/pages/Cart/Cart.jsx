@@ -158,6 +158,7 @@ function CartPage() {
                     <div className="flex items-center space-x-4">
                       <img
                         src={item.image}
+                        src={item.image}
                         alt={item.title}
                         className="w-14 h-14 object-contain"
                       />
