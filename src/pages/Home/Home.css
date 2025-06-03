@@ -8,6 +8,11 @@
   padding: 0;
 }
 
+#shop-button:hover{
+  background-color: #000000;
+  color: #fff;
+}
+
 .Black-box-tilted {
   height: 65vh;
   width: 100vw;
@@ -119,6 +124,13 @@
   padding-right: 30px;
   padding-top: 10px;
   padding-bottom: 10px;
+  transition: all 0.25s ease;
+}
+
+.button:hover{
+  color: #fff;
+  background-color: #000;
+  transition: all 0.25s ease;
 }
 
 .section-3-container {
