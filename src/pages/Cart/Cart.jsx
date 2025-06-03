@@ -1,59 +1,59 @@
-import React, { useContext, useEffect, useState } from "react";
-import Context from "../../Context/Context.jsx";
-import { IoMdTrash, IoMdArrowBack } from "react-icons/io";
-import { FiCheckCircle } from "react-icons/fi";
-import { ImSpinner9 } from "react-icons/im";
-import { IoIosAddCircle } from "react-icons/io";
-import { IoMdArrowDropupCircle } from "react-icons/io";
-import hero from "../../assets/speedball-homepage-laptop.jpeg";
-import Header from "../../components/Header/Header.jsx";
-import Footer from "../../components/Footer/Footer.jsx";
+import React, { useContext, useEffect, useState } from 'react';
+import Context from '../../Context/Context.jsx';
+import { IoMdTrash, IoMdArrowBack } from 'react-icons/io';
+import { FiCheckCircle } from 'react-icons/fi';
+import { ImSpinner9 } from 'react-icons/im';
+import { IoIosAddCircle } from 'react-icons/io';
+import { IoMdArrowDropupCircle } from 'react-icons/io';
+import hero from '../../assets/speedball-homepage-laptop.jpeg';
+import Header from '../../components/Header/Header.jsx';
+import Footer from '../../components/Footer/Footer.jsx';
 
 function CartPage() {
   const ctx = useContext(Context);
   const [cartItems, setCartItems] = useState([]);
   const [discount, setDiscount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [coupon, setCoupon] = useState("");
-  const [error, setError] = useState("");
+  const [coupon, setCoupon] = useState('');
+  const [error, setError] = useState('');
   const [checkoutComplete, setCheckoutComplete] = useState(false);
   const [addressExpanded, setAddressExpanded] = useState(false);
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState('');
   const [address, setAddress] = useState({
-    fullName: "",
-    cityTown: "",
-    street: "",
-    country: "Uganda",
-    phoneNumber: "",
+    fullName: '',
+    cityTown: '',
+    street: '',
+    country: 'Uganda',
+    phoneNumber: '',
     date: date,
   });
 
   useEffect(() => {
-    if (!localStorage.getItem("CartItems")) return;
-    setCartItems(JSON.parse(localStorage.getItem("CartItems")));
+    if (!localStorage.getItem('CartItems')) return;
+    setCartItems(JSON.parse(localStorage.getItem('CartItems')));
   }, []);
 
   const handleQuantityChange = (index, newQuantity) => {
     const updatedCartItems = [...cartItems];
     updatedCartItems[index].quantity = newQuantity;
     setCartItems(updatedCartItems);
-    localStorage.setItem("CartItems", JSON.stringify(updatedCartItems));
+    localStorage.setItem('CartItems', JSON.stringify(updatedCartItems));
   };
 
   const handleSizeChange = (index, newSize) => {
     const updatedCartItems = [...cartItems];
     updatedCartItems[index].size = newSize;
     setCartItems(updatedCartItems);
-    localStorage.setItem("CartItems", JSON.stringify(updatedCartItems));
+    localStorage.setItem('CartItems', JSON.stringify(updatedCartItems));
   };
 
   const handleCouponVerification = async () => {
     const couponData = await fetchCouponData();
     console.log(couponData);
 
-    if (coupon.trim() == "") {
+    if (coupon.trim() == '') {
       setDiscount(0);
-      setError("");
+      setError('');
       return;
     }
 
@@ -65,7 +65,7 @@ function CartPage() {
       }
     }
     setDiscount(0);
-    setError("No discount applied");
+    setError('No discount applied');
     return;
   };
 
@@ -73,7 +73,7 @@ function CartPage() {
     const updatedCartItems = [...cartItems];
     updatedCartItems.splice(index, 1);
     setCartItems(updatedCartItems);
-    localStorage.setItem("CartItems", JSON.stringify(updatedCartItems));
+    localStorage.setItem('CartItems', JSON.stringify(updatedCartItems));
   };
 
   const computeCost = (array) => {
@@ -89,7 +89,7 @@ function CartPage() {
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
     setAddress({ ...address, [name]: value });
-    setError("");
+    setError('');
   };
 
   const handleCouponChange = (e) => {
@@ -98,21 +98,21 @@ function CartPage() {
 
   const handleCheckout = async () => {
     if (cartItems.length == 0) {
-      setError("Please add some items to cart first");
+      setError('Please add some items to cart first');
       return;
     }
 
     setLoading(true);
 
     if (
-      address.cityTown.trim() == "" ||
-      address.street.trim() == "" ||
-      address.phoneNumber.trim() == ""
+      address.cityTown.trim() == '' ||
+      address.street.trim() == '' ||
+      address.phoneNumber.trim() == ''
     ) {
-      setError("Please fill in all the above fields.");
+      setError('Please fill in all the above fields.');
       setLoading(false);
     } else {
-      setError("");
+      setError('');
       const currentTimeMillis = Date.now();
       const eatOffsetMillis = 3 * 60 * 60 * 1000;
       const eatTimeMillis = currentTimeMillis + eatOffsetMillis;
@@ -127,15 +127,15 @@ function CartPage() {
           computeCost(cartItems).totalCost * (1 - Number(discount) / 100),
         coupon: coupon,
         date: eatTimeString,
-        status: "pending",
+        status: 'pending',
       };
 
       fetch(
-        "https://conspiracy-67f09-default-rtdb.firebaseio.com/orders.json",
+        'https://conspiracy-67f09-default-rtdb.firebaseio.com/orders.json',
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(checkoutData),
         }
@@ -146,7 +146,7 @@ function CartPage() {
           setLoading(false);
         })
         .catch((error) => {
-          console.error("Error:", error);
+          console.error('Error:', error);
           setLoading(false);
         });
     }
@@ -154,12 +154,12 @@ function CartPage() {
 
   async function fetchCouponData() {
     const firebaseUrl =
-      "https://conspiracy-67f09-default-rtdb.firebaseio.com/coupons.json";
+      'https://conspiracy-67f09-default-rtdb.firebaseio.com/coupons.json';
 
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     };
 
@@ -167,13 +167,13 @@ function CartPage() {
       const response = await fetch(firebaseUrl, requestOptions);
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error('Network response was not ok');
       }
 
       const responseData = await response.json();
       return responseData;
     } catch (error) {
-      return "Error sending data to Firebase:";
+      return 'Error sending data to Firebase:';
     }
   }
 
@@ -183,7 +183,7 @@ function CartPage() {
       {/* TODO add some padding, so header and button do not overlap */}
       <div className="flex items-center p-4 border-b border-gray-700">
         <button
-          onClick={() => (window.location.href = "/")}
+          onClick={() => (window.location.href = '/')}
           className="flex items-center text-white hover:text-gray-300 transition-colors"
         >
           <IoMdArrowBack className="w-6 h-6 mr-2" />
@@ -220,7 +220,7 @@ function CartPage() {
                   >
                     <div className="flex items-center space-x-4">
                       <img
-                        src={`../../assets/${item.image}`}
+                        src={item.image}
                         alt={item.title}
                         className="w-20 h-20 object-cover rounded-lg"
                       />
@@ -229,7 +229,7 @@ function CartPage() {
                           {item.title}
                         </h3>
                         <p className="text-gray-300 mb-2">
-                          UGX {item.price.toLocaleString("en-US")}
+                          {item.price.toLocaleString('en-US')}
                         </p>
                         <div className="flex items-center space-x-3">
                           <input
@@ -352,7 +352,7 @@ function CartPage() {
               {error && (
                 <p
                   className={`mt-2 text-sm ${
-                    error.includes("Valid") ? "text-green-600" : "text-red-600"
+                    error.includes('Valid') ? 'text-green-600' : 'text-red-600'
                   }`}
                 >
                   {error}
@@ -365,17 +365,17 @@ function CartPage() {
               <div className="flex justify-between items-center">
                 <span className="font-semibold">Total Shirts:</span>
                 <span className="font-bold">
-                  {computeCost(cartItems).totalQuantity.toLocaleString("en-US")}
+                  {computeCost(cartItems).totalQuantity.toLocaleString('en-US')}
                 </span>
               </div>
               <div className="flex justify-between items-center text-lg">
                 <span className="font-semibold">Total Cost:</span>
                 <span className="font-bold">
-                  UGX{" "}
+                  UGX{' '}
                   {(
                     computeCost(cartItems).totalCost *
                     (1 - Number(discount) / 100)
-                  ).toLocaleString("en-US")}
+                  ).toLocaleString('en-US')}
                 </span>
               </div>
             </div>
@@ -389,7 +389,7 @@ function CartPage() {
                 {loading ? (
                   <ImSpinner9 className="w-6 h-6 animate-spin" />
                 ) : (
-                  "CHECKOUT"
+                  'CHECKOUT'
                 )}
               </button>
             ) : (
