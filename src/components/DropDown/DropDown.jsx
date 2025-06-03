@@ -1,20 +1,20 @@
 // DropDown.jsx
-import { useContext, useEffect, useRef, useState } from 'react';
-import './DropDown.css';
-import { NavLink } from 'react-router-dom';
-import Context from '../../Context/Context';
+import { useContext, useEffect, useRef, useState } from "react";
+import "./DropDown.css";
+import { NavLink } from "react-router-dom";
+import Context from "../../Context/Context";
 
 function DropDown() {
   const context = useContext(Context);
   const [visible, setVisible] = useState(false);
-  const [animationClass, setAnimationClass] = useState('');
+  const [animationClass, setAnimationClass] = useState("");
 
   useEffect(() => {
     if (context.isDrop) {
       setVisible(true);
-      setAnimationClass('show');
+      setAnimationClass("show");
     } else if (visible) {
-      setAnimationClass('hide');
+      setAnimationClass("hide");
       const timer = setTimeout(() => {
         setVisible(false);
       }, 300); // match hide animation
@@ -33,17 +33,35 @@ function DropDown() {
     >
       <NavLink
         to="/"
-        className={({ isActive }) => (isActive ? 'active' : 'navlink')}
+        className={({ isActive }) => (isActive ? "active" : "navlink")}
         onClick={() => {
           context.setIsDropVal(false);
         }}
-        style={{ marginTop: '40px' }}
+        style={{ marginTop: "40px" }}
       >
         Home
       </NavLink>
       <NavLink
+        to="/about"
+        className={({ isActive }) => (isActive ? "active" : "navlink")}
+        onClick={() => {
+          context.setIsDropVal(false);
+        }}
+      >
+        About
+      </NavLink>
+      <NavLink
+        to="/cart"
+        className={({ isActive }) => (isActive ? "active" : "navlink")}
+        onClick={() => {
+          context.setIsDropVal(false);
+        }}
+      >
+        Cart
+      </NavLink>
+      <NavLink
         to="/shop"
-        className={({ isActive }) => (isActive ? 'active' : 'navlink')}
+        className={({ isActive }) => (isActive ? "active" : "navlink")}
         onClick={() => {
           context.setIsDropVal(false);
         }}
@@ -52,30 +70,12 @@ function DropDown() {
       </NavLink>
       <NavLink
         to="/events"
-        className={({ isActive }) => (isActive ? 'active' : 'navlink')}
+        className={({ isActive }) => (isActive ? "active" : "navlink")}
         onClick={() => {
           context.setIsDropVal(false);
         }}
       >
         Events
-      </NavLink>
-      <NavLink
-        to="/cart"
-        className={({ isActive }) => (isActive ? 'active' : 'navlink')}
-        onClick={() => {
-          context.setIsDropVal(false);
-        }}
-      >
-        Cart
-      </NavLink>
-      <NavLink
-        to="/about"
-        className={({ isActive }) => (isActive ? 'active' : 'navlink')}
-        onClick={() => {
-          context.setIsDropVal(false);
-        }}
-      >
-        About
       </NavLink>
     </div>
   );
