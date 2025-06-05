@@ -24,6 +24,28 @@
   - Progress: [ ] Mobile [ ] Tablet [ ] Desktop
   notes: component => standalone page ?
 
+    (cart page) current shit to do:
+    
+    FUNCTIONALITY
+    set up the order chain
+
+    checkout clicked -> mobile money logic -> order sent to controller.
+
+    if query of funds (momopay, airtelpay) is valid, forward to admin. if not, return error to client.
+    (use the respective APIs)
+
+    note: pay on delivery
+
+    side quests:
+    segment off components of the page.
+
+    design admin page for orders
+
+    ---
+
+    set up email/Newsletter
+
+
 # Functionality
 - [ ] Accounts System
   - Assignee: Joshua
