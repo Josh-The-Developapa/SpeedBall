@@ -2,10 +2,41 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabaseClient";
 
 function AdminPage() {
+  const [authenticated, setAuthenticated] = useState(false);
+  const [password, setPassword] = useState("");
   const [tab, setTab] = useState("orders");
+
+  // Render login form if not authenticated
+  if (!authenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900 text-gray-100">
+        <div className="bg-gray-800 p-6 rounded shadow-md">
+          <h1 className="text-xl mb-4">Enter Password</h1>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-3 py-2 mb-4 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none"
+          />
+          <button
+            onClick={() => {
+              // Hardcoded password check
+              if (password === "letmein") setAuthenticated(true);
+            }}
+            className="w-full bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Main admin panel once authenticated
   return (
     <div className="min-h-screen flex flex-col bg-gray-900 text-gray-100">
       <main className="flex-1 p-4">
+        {/* Tab buttons to switch between views */}
         <div className="flex space-x-4 mb-4">
           <button
             className={`px-4 py-2 rounded transition-colors duration-200 ${
@@ -28,6 +59,7 @@ function AdminPage() {
             Newsletter
           </button>
         </div>
+        {/* Render appropriate table based on selected tab */}
         {tab === "orders" ? <OrdersTable /> : <NewsletterTable />}
       </main>
     </div>
@@ -38,6 +70,7 @@ function OrdersTable() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
+    // Function to fetch current orders
     const fetchOrders = async () => {
       const { data, error } = await supabase
         .from("orders")
@@ -48,15 +81,18 @@ function OrdersTable() {
     };
 
     fetchOrders();
+
+    // Setup real-time subscription to listen for changes to "orders" table
     const channel = supabase
       .channel("orders-changes")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "orders" },
-        () => fetchOrders()
+        () => fetchOrders() // Re-fetch orders on any change
       )
       .subscribe();
 
+    // Cleanup on component unmount
     return () => {
       supabase.removeChannel(channel);
     };
@@ -108,6 +144,7 @@ function NewsletterTable() {
   const [emails, setEmails] = useState([]);
 
   useEffect(() => {
+    // Function to fetch newsletter emails
     const fetchEmails = async () => {
       const { data, error } = await supabase
         .from("newsletter")
@@ -118,15 +155,18 @@ function NewsletterTable() {
     };
 
     fetchEmails();
+
+    // Setup real-time subscription to listen for changes to "newsletter" table
     const channel = supabase
       .channel("newsletter-changes")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "newsletter" },
-        () => fetchEmails()
+        () => fetchEmails() // Re-fetch emails on any change
       )
       .subscribe();
 
+    // Cleanup on component unmount
     return () => {
       supabase.removeChannel(channel);
     };
