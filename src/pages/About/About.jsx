@@ -18,7 +18,7 @@ export default function AboutPage() {
           />
 
           {/* Mobile Fade */}
-          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black to-transparent xl:hidden pointer-events-none fade-overlay mobile-fade" />
+          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black to-transparent xl:hidden pointer-events-none fade-overlay mobile-fade" />
 
           {/* Desktop Fade */}
           <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-black to-transparent hidden xl:block pointer-events-none fade-overlay desktop-fade" />

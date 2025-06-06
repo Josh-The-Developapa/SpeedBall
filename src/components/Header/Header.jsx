@@ -9,6 +9,10 @@ function Header() {
   const context = useContext(Context);
   const location = useLocation();
   const [isAbout, setIsAbout] = useState(location.pathname == '/about');
+  const [logoDimensions, setLogoDimensions] = useState({
+    width: 90,
+    height: 70,
+  });
 
   // Initialize colors based on the current path immediately
   const initialIconColor = location.pathname === '/' ? '#000000' : '#ffffff';
@@ -23,8 +27,8 @@ function Header() {
   const SB_Header_SVG = () => {
     return (
       <svg
-        width="90"
-        height="70"
+        width={logoDimensions.width}
+        height={logoDimensions.height}
         viewBox="0 0 64 25"
         fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
@@ -74,6 +78,10 @@ function Header() {
       const scrolledPast90vh = scrollY > screenHeight * 0.9;
       const screenWidth = window.innerWidth;
 
+      if (screenWidth < 390) {
+        setLogoDimensions({ width: '60px', height: '40px' });
+      }
+
       if (isHome) {
         if (scrolledPast90vh) {
           // Regardless of width, always white
@@ -82,6 +90,7 @@ function Header() {
         } else {
           if (screenWidth < 390) {
             // Less than 90vh AND small screen
+
             setLogoDisplay('block');
             setIconColors('#000000');
           } else {
