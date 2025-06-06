@@ -21,20 +21,12 @@ export default function ProductCard(props) {
       size: selectedSize || 'Not selected',
     });
 
-    const sanitizedPrice = parseInt(
-      props.price
-        .toString()
-        .replace(/UGX\s*/gi, "") // Remove any "UGX" (case-insensitive) and following spaces
-        .replace(/[^0-9]/g, ""), // Remove any non-digit characters
-      10
-    );
-
     const product = {
       title: props.product,
-      price: sanitizedPrice,
-      image: props.image.split("?")[0],
+      price: props.price,
+      image: props.image,
       quantity: 1,
-      size: selectedSize || sizes[0],
+      size: selectedSize || sizes[0], // Default to first size if none selected
     };
 
     // Trigger cart animation
@@ -93,21 +85,20 @@ export default function ProductCard(props) {
           className="product-card-image"
           style={props.image_dimensions}
           alt={props.product}
+          onClick={() => navigate(`/product/${productFormattedName}`)}
         />
       </div>
 
       {/* Product Name */}
       <h2
-        className="text-lg font-semibold product-card-title"
+        className="text-lg font-bold product-card-title"
         onClick={() => navigate(`/product/${productFormattedName}`)}
       >
         {props.product}
       </h2>
 
       {/* Price */}
-      <p className="text-lg text-white-400 font-bold price">
-        UGX {props.price}
-      </p>
+      <p className="text-lg text-white-400 font-bold price">{props.price}</p>
 
       {/* Size Selection */}
       <div className="flex flex-wrap gap-2">
@@ -132,8 +123,8 @@ export default function ProductCard(props) {
 
       {/* Add to Cart Button */}
       <button
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl transition cart-button"
-        // className="w-full text-white py-2 rounded-xl transition cart-button"
+        // className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl transition .cart-button"
+        className="w-full text-white py-2 rounded-xl transition cart-button"
         onClick={handleAddToCart}
       >
         {buttonText}

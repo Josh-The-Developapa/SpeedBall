@@ -1,19 +1,20 @@
-import hero from "../../assets/about-hero.svg";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
+import { useEffect } from 'react';
+import hero from '../../assets/about-hero.svg';
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col about-page">
       <Header />
 
-      <section className="flex flex-col xl:flex-row flex-grow about-section">
+      <section className="flex flex-col xl:flex-row flex-grow about-section ">
         {/* Image Section */}
-        <div className="about-image relative xl:w-[75%] xl:h-[100vh] h-[50vh]">
+        <div className="about-image-div relative xl:w-[75%] xl:h-[990px] h-[990px]">
           <img
             src={hero}
             alt="Hero"
-            className="w-full h-full object-cover object-top object-right about-image"
+            className="w-full h-[990px] object-cover object-top object-right"
           />
 
           {/* Mobile Fade */}
@@ -24,7 +25,10 @@ export default function AboutPage() {
         </div>
 
         {/* Text Section */}
-        <div className="w-full xl:w-[40%] px-6 py-12 xl:py-24 xl:px-12 text-base xl:text-lg leading-relaxed space-y-6 overflow-y-auto text-content">
+        <div
+          className="w-full xl:w-[40%] px-6 py-12 xl:py-24 xl:px-12 text-base xl:text-lg leading-relaxed space-y-6 overflow-y-auto text-content"
+          id="text-section"
+        >
           <p>
             Speedball is a contemporary fashion house rooted in Kampala's
             underground, where sound, sweat, and subversion converge. Born at

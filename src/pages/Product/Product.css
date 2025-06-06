@@ -112,9 +112,10 @@
 
 .product-sizes {
   height: 50px;
+  /* background-color: green; */
 }
 
-.product-sizes button {
+.size-buttons {
   margin: 0.3rem;
   padding: 0.4rem 0.8rem;
   border: 1px solid #888;
@@ -127,10 +128,6 @@
   margin-top: 1rem;
   display: flex;
   gap: 1rem;
-}
-
-.size-buttons:hover {
-  border: 2px solid #ffffff;
 }
 
 .add-to-cart {

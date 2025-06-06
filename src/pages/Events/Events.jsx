@@ -2,6 +2,7 @@ import React from 'react';
 import './Events.css';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
+import { Link } from 'react-router-dom';
 
 function Events() {
   return (
@@ -15,9 +16,9 @@ function Events() {
             <button className="events-button" id="buy-tickets-button">
               Buy Tickets
             </button>
-            <button className="events-button" id="shop-merch-button">
+            <Link className="events-button" id="shop-merch-button" to="/shop">
               Shop Merch
-            </button>
+            </Link>
           </div>
         </div>
       </div>

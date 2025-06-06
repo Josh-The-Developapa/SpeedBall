@@ -1,40 +1,43 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { FiCheckCircle } from "react-icons/fi";
-import { ImSpinner9 } from "react-icons/im";
-import hero from "../../assets/speedball-homepage-laptop.jpeg";
-import Header from "../../components/Header/Header.jsx";
-import Footer from "../../components/Footer/Footer.jsx";
-import { parsePhoneNumberFromString } from "libphonenumber-js";
-import { supabase } from "../../lib/supabaseClient";
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { FiCheckCircle } from 'react-icons/fi';
+import { ImSpinner9 } from 'react-icons/im';
+import hero from '../../assets/speedball-homepage-laptop.jpeg';
+import Header from '../../components/Header/Header.jsx';
+import Footer from '../../components/Footer/Footer.jsx';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import { supabase } from '../../lib/supabaseClient';
+import CloseIcon from '../../assets/close-icon.svg';
+import PlusIcon from '../../assets/plus-circle.svg';
+import MinusIcon from '../../assets/minus-circle.svg';
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showAddressOverlay, setShowAddressOverlay] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const [showPaymentModal, setShowPaymentModal] = useState(() => {
-    return localStorage.getItem("PaymentModalState") === "open";
+    return localStorage.getItem('PaymentModalState') === 'open';
   });
 
   const [checkoutComplete, setCheckoutComplete] = useState(false);
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState('');
   const [address, setAddress] = useState({
-    fullName: "",
-    cityTown: "",
-    street: "",
-    country: "Uganda",
-    phoneNumber: "",
+    fullName: '',
+    cityTown: '',
+    street: '',
+    country: 'Uganda',
+    phoneNumber: '',
     date: date,
   });
 
   function formatPhoneNumber(raw) {
-    if (!raw) return "";
+    if (!raw) return '';
 
-    const parsed = parsePhoneNumberFromString(raw, "UG"); // fallback region if country code is missing
+    const parsed = parsePhoneNumberFromString(raw, 'UG'); // fallback region if country code is missing
     if (!parsed.isValid()) {
-      setError("Please enter a valid phone number.");
+      setError('Please enter a valid phone number.');
       return;
     }
     if (!parsed || !parsed.isValid()) return raw;
@@ -43,12 +46,12 @@ function CartPage() {
   }
 
   useEffect(() => {
-    const storedCart = localStorage.getItem("CartItems");
+    const storedCart = localStorage.getItem('CartItems');
     if (storedCart) {
       setCartItems(JSON.parse(storedCart));
     }
 
-    if (localStorage.getItem("PaymentModalState") === "open") {
+    if (localStorage.getItem('PaymentModalState') === 'open') {
       setShowPaymentModal(true);
     }
   }, []);
@@ -59,14 +62,14 @@ function CartPage() {
     const updatedCartItems = [...cartItems];
     updatedCartItems[index].quantity = newQuantity;
     setCartItems(updatedCartItems);
-    localStorage.setItem("CartItems", JSON.stringify(updatedCartItems));
+    localStorage.setItem('CartItems', JSON.stringify(updatedCartItems));
   };
 
   const handleDeleteItem = (index) => {
     const updatedCartItems = [...cartItems];
     updatedCartItems.splice(index, 1);
     setCartItems(updatedCartItems);
-    localStorage.setItem("CartItems", JSON.stringify(updatedCartItems));
+    localStorage.setItem('CartItems', JSON.stringify(updatedCartItems));
   };
 
   const computeTotals = (array) => {
@@ -82,24 +85,24 @@ function CartPage() {
   const handleClosePaymentModal = () => {
     if (
       !window.confirm(
-        "Are you sure you want to close this screen? Payment may be missed."
+        'Are you sure you want to close this screen? Payment may be missed.'
       )
     )
       return;
     setShowPaymentModal(false);
-    localStorage.removeItem("PaymentModalState");
+    localStorage.removeItem('PaymentModalState');
   };
 
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
     setAddress({ ...address, [name]: value });
-    setError("");
+    setError('');
   };
 
   // where the magic happens
   const handleCheckout = async () => {
     if (cartItems.length === 0) {
-      setError("Please add some items to cart first.");
+      setError('Please add some items to cart first.');
       return;
     }
 
@@ -109,7 +112,7 @@ function CartPage() {
 
     setLoading(true);
 
-    const { error } = await supabase.from("orders").insert([
+    const { error } = await supabase.from('orders').insert([
       {
         items: cartItems,
         total_quantity: totalQuantity,
@@ -120,14 +123,14 @@ function CartPage() {
     ]);
 
     if (error) {
-      console.error("Supabase Insert Error:", error.message);
-      setError("Something went wrong. Please try again.");
+      console.error('Supabase Insert Error:', error.message);
+      setError('Something went wrong. Please try again.');
     } else {
-      localStorage.setItem("PaymentModalState", "open");
+      localStorage.setItem('PaymentModalState', 'open');
       setShowPaymentModal(true);
       setCheckoutComplete(true);
       setCartItems([]);
-      localStorage.removeItem("CartItems");
+      localStorage.removeItem('CartItems');
       setShowAddressOverlay(false);
     }
 
@@ -172,54 +175,56 @@ function CartPage() {
                       <div className="flex flex-col justify-between">
                         <h3
                           className="text-sm tracking-wide"
-                          style={{ marginBottom: "10px", marginRight: "5px" }}
+                          style={{ marginBottom: '10px', marginRight: '5px' }}
                         >
                           {item.title}
                         </h3>
                         <p
                           className="text-[0.975rem] font-medium"
-                          style={{ marginBottom: "10px" }}
+                          style={{ marginBottom: '10px' }}
                         >
-                          UGX {item.price.toLocaleString("en-UG")}
+                          UGX {item.price.toLocaleString('en-UG')}
                         </p>
                         <div className="flex items-center space-x-2 mt-1">
-                          <button
+                          <img
+                            src={MinusIcon}
+                            alt="Minus-Icon"
+                            className="w-6 h-6 flex items-center justify-center text-xs"
                             onClick={() =>
                               handleQuantityChange(index, item.quantity - 1)
                             }
-                            className="w-6 h-6 flex items-center justify-center border border-white rounded-full text-xs"
-                          >
-                            –
-                          </button>
+                            style={{ cursor: 'pointer' }}
+                          />
                           <span className="text-sm w-4 text-center">
                             {item.quantity}
                           </span>
-                          <button
+                          <img
+                            src={PlusIcon}
+                            alt="Plus-Icon"
+                            className="w-6 h-6 flex items-center justify-center rounded-full text-xs"
                             onClick={() =>
                               handleQuantityChange(index, item.quantity + 1)
                             }
-                            className="w-6 h-6 flex items-center justify-center border border-white rounded-full text-xs"
-                          >
-                            +
-                          </button>
+                            style={{ cursor: 'pointer' }}
+                          />
                         </div>
                       </div>
                     </div>
-
                     {/* Size badge remains inside normal flow */}
-                    <div className="flex flex-col items-end mt-auto space-y-2">
-                      <span className="text-xs border border-gray-500 px-2 py-[1px] rounded-full">
+                    <div className="flex flex-col items-end mt-auto space-y-0">
+                      <span className="text-[16px] border border-gray-500 px-2 py-[1px]">
                         {item.size}
                       </span>
                     </div>
-
                     {/* Close button positioned absolutely top right */}
-                    <button
+
+                    <img
+                      src={CloseIcon}
+                      alt="Close-Icon"
+                      className="absolute top-2 right-2 w-6 h-6 text-[10px] rounded-full flex items-center justify-center hover:text-white"
+                      style={{ cursor: 'pointer' }}
                       onClick={() => handleDeleteItem(index)}
-                      className="absolute top-2 right-2 w-6 h-6 text-[10px] text-red-500 border border-red-500 rounded-full flex items-center justify-center hover:bg-red-600 hover:text-white"
-                    >
-                      ×
-                    </button>
+                    />
                   </div>
                 ))}
               </div>
@@ -234,14 +239,21 @@ function CartPage() {
           <div className="bg-white text-black p-6">
             {/* Address Section */}
             {showAddressOverlay && (
-              <div className="fixed inset-0 bg-black bg-opacity-20 z-50 flex items-center justify-center">
+              <div
+                className="fixed inset-0 bg-black bg-opacity-20 z-50 flex items-center justify-center"
+                onClick={() => {
+                  setShowAddressOverlay(false);
+                }}
+              >
                 <div className="bg-white text-black rounded-lg p-6 w-[90%] max-w-md relative">
-                  <button
+                  <img
+                    src={CloseIcon}
+                    alt="Close-Icon"
+                    className="absolute top-2 right-2 h-8 w-8 m-[10px]"
+                    style={{ cursor: 'pointer' }}
                     onClick={() => setShowAddressOverlay(false)}
-                    className="absolute top-2 right-2 text-gray-600 hover:text-black text-xl"
-                  >
-                    ×
-                  </button>
+                  />
+
                   <h3 className="text-lg font-semibold mb-4">
                     Add Delivery Address
                   </h3>
@@ -285,7 +297,7 @@ function CartPage() {
                         }
                       }}
                       onPaste={(e) => {
-                        const paste = e.clipboardData.getData("text");
+                        const paste = e.clipboardData.getData('text');
                         if (!/^[\d\s()+-]*$/.test(paste)) e.preventDefault();
                       }}
                       className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
@@ -305,7 +317,7 @@ function CartPage() {
             <div className="flex flex-col items-start text-lg space-y-1 pb-4">
               <span className="font-semibold">Total</span>
               <span className="text-2xl font-medium">
-                UGX {computeTotals(cartItems).totalCost.toLocaleString("en-UG")}
+                UGX {computeTotals(cartItems).totalCost.toLocaleString('en-UG')}
               </span>
             </div>
 
@@ -315,8 +327,8 @@ function CartPage() {
                 <button
                   className={`flex-1 px-6 py-4 rounded-lg font-semibold text-lg flex items-center justify-center transition-colors ${
                     computeTotals(cartItems).totalCost > 0
-                      ? "bg-blue-700 text-white hover:bg-blue-800"
-                      : "bg-gray-400 text-gray-200 cursor-not-allowed"
+                      ? 'bg-blue-700 text-white hover:bg-blue-800'
+                      : 'bg-gray-400 text-gray-200 cursor-not-allowed'
                   }`}
                   onClick={() => {
                     if (computeTotals(cartItems).totalCost > 0) {
@@ -328,7 +340,7 @@ function CartPage() {
                   {loading ? (
                     <ImSpinner9 className="w-6 h-6 animate-spin" />
                   ) : (
-                    "CHECKOUT"
+                    'CHECKOUT'
                   )}
                 </button>
               ) : (
@@ -366,7 +378,7 @@ function CartPage() {
                   </p>
 
                   <p className="mb-2 text-sm text-gray-800">
-                    Once the courier arrives and confirms the delivery, pay{" "}
+                    Once the courier arrives and confirms the delivery, pay{' '}
                     <strong>only</strong> to the following numbers:
                   </p>
 

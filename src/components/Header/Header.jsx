@@ -70,11 +70,11 @@ function Header() {
       const isProduct = location.pathname.includes('/product');
       const scrollY = window.scrollY;
       const screenHeight = window.innerHeight;
-      const scrolledPast30vh = scrollY > screenHeight * 0.3;
+      const scrolledPast90vh = scrollY > screenHeight * 0.9;
       const screenWidth = window.innerWidth;
 
       if (isHome) {
-        if (scrolledPast30vh) {
+        if (scrolledPast90vh) {
           // Regardless of width, always white
           setLogoDisplay('block');
           setIconColors('#ffffff');
@@ -142,7 +142,7 @@ function Header() {
           }}
           className="sb-logo-div"
         >
-          <Link to="/">
+          <Link to="/" onClick={() => window.scrollY === 0}>
             <SB_Header_SVG />
           </Link>
         </div>

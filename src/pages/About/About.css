@@ -26,12 +26,6 @@
   display: flex;
 }
 
-/* Hero Image */
-.about-image {
-  object-fit: contain;
-  object-position: bottom center;
-}
-
 /* Fade Overlays */
 .fade-overlay {
   position: absolute;

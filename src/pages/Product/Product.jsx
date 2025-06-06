@@ -1,23 +1,35 @@
 import './Product.css';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import Context from '../../Context/Context';
+
 import Product1 from '../../assets/full-fit.svg';
 import Product2 from '../../assets/jacket.svg';
 import Product3 from '../../assets/jeans.svg';
 import Hero from '../../assets/denim-jeans.svg';
+
 // Swiper stuff
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Pagination } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 function Product() {
   const { product } = useParams();
+  const navigate = useNavigate();
+  const ctx = useContext(Context);
+
+  const [selectedSize, setSelectedSize] = useState('');
+  const [sizeJustAdded, setSizeJustAdded] = useState(false);
+  const [buttonText, setButtonText] = useState('ADD TO CART');
+
+  const sizes = ['M', 'L', 'XL', '2XL'];
 
   let product_title;
   let product_image = '';
+  let product_price = '45,000 UGX';
 
   const productInfo = {
     0: {
@@ -25,32 +37,83 @@ function Product() {
       price: '45,000 UGX',
       image: Product1,
     },
-    1: {
-      title: 'Denim Campaign Jacket',
-      price: '45,000 UGX',
-      image: Product2,
-    },
-    2: {
-      title: 'Denim Campaign Jeans',
-      price: '45,000 UGX',
-      image: Product3,
-    },
+    1: { title: 'Denim Campaign Jacket', price: '45,000 UGX', image: Product2 },
+    2: { title: 'Denim Campaign Jeans', price: '45,000 UGX', image: Product3 },
   };
 
   if (product === 'denim-campaign-full-fit') {
-    product_title = productInfo[0].title;
-    product_image = productInfo[0].image;
+    ({
+      title: product_title,
+      image: product_image,
+      price: product_price,
+    } = productInfo[0]);
   } else if (product === 'denim-campaign-jacket') {
-    product_title = productInfo[1].title;
-    product_image = productInfo[1].image;
+    ({
+      title: product_title,
+      image: product_image,
+      price: product_price,
+    } = productInfo[1]);
   } else if (product === 'denim-campaign-jeans') {
-    product_title = productInfo[2].title;
-    product_image = productInfo[2].image;
+    ({
+      title: product_title,
+      image: product_image,
+      price: product_price,
+    } = productInfo[2]);
   }
 
   const isBigIcon =
-    product_title == productInfo[0].title ||
-    product_title == productInfo[2].title;
+    product_title === productInfo[0].title ||
+    product_title === productInfo[2].title;
+
+  const handleAddToCart = () => {
+    const sanitizedPrice = parseInt(
+      product_price
+        .toString()
+        .replace(/UGX\s*/gi, '')
+        .replace(/[^0-9]/g, ''),
+      10
+    );
+
+    const productObj = {
+      title: product_title,
+      price: sanitizedPrice,
+      image: product_image.split('?')[0],
+      quantity: 1,
+      size: selectedSize || sizes[0],
+    };
+
+    if (ctx.setAnimateCart) {
+      ctx.setAnimateCart(true);
+      setTimeout(() => {
+        ctx.setAnimateCart(false);
+      }, 1000);
+    }
+
+    const existingCartItems =
+      JSON.parse(localStorage.getItem('CartItems')) || [];
+    const existingProductIndex = existingCartItems.findIndex(
+      (item) => item.title === productObj.title && item.size === productObj.size
+    );
+
+    if (existingProductIndex !== -1) {
+      existingCartItems[existingProductIndex].quantity += 1;
+    } else {
+      existingCartItems.push(productObj);
+    }
+
+    localStorage.setItem('CartItems', JSON.stringify(existingCartItems));
+
+    setSizeJustAdded(true);
+    setTimeout(() => {
+      setSelectedSize('');
+      setSizeJustAdded(false);
+    }, 100);
+
+    setButtonText('ADDED!');
+    setTimeout(() => {
+      setButtonText('ADD TO CART');
+    }, 2000);
+  };
 
   return (
     <div className="products-body-container">
@@ -79,29 +142,18 @@ function Product() {
                 slidesPerView={1}
                 className="product-page-swiper"
               >
-                <SwiperSlide>
-                  <img
-                    alt="product-hero"
-                    src={Hero}
-                    className="product-swiper-image"
-                  />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <img
-                    alt="product-hero"
-                    src={Hero}
-                    className="product-swiper-image"
-                  />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <img
-                    alt="product-hero"
-                    src={Hero}
-                    className="product-swiper-image"
-                  />
-                </SwiperSlide>
+                {[1, 2, 3].map((_, i) => (
+                  <SwiperSlide key={i}>
+                    <img
+                      alt="product-hero"
+                      src={Hero}
+                      className="product-swiper-image"
+                    />
+                  </SwiperSlide>
+                ))}
               </Swiper>
             </div>
+
             <div className="product-info">
               <img
                 src={product_image}
@@ -116,15 +168,35 @@ function Product() {
                 metus nec fringilla accumsan, risus sem sollicitudin lacus, ut
                 interdum tellus elit sed risus.
               </p>
+
+              {/* Size Buttons */}
               <div className="product-sizes">
-                <button className="size-buttons">M</button>
-                <button className="size-buttons">L</button>
-                <button className="size-buttons">XL</button>
-                <button className="size-buttons">2XL</button>
+                {sizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => {
+                      setSelectedSize(size);
+                      console.log('Size selected:', size); // Debug log for size selection
+                    }}
+                    className={`size-buttons ${
+                      selectedSize === size && !sizeJustAdded
+                        ? 'border-black shadow-[0_0_0_2px_black]' // Permanent hover style
+                        : 'border-zinc-600 text-gray-300 hover:border-black hover:shadow-[0_0_0_2px_black]'
+                    } transition-all duration-250`}
+                  >
+                    {size}
+                  </button>
+                ))}
               </div>
+
+              {/* Buttons */}
               <div className="product-buttons">
-                <button className="add-to-cart">ADD TO CART</button>
-                <button className="see-all">SEE ALL</button>
+                <button className="add-to-cart" onClick={handleAddToCart}>
+                  {buttonText}
+                </button>
+                <button className="see-all" onClick={() => navigate('/shop')}>
+                  SEE ALL
+                </button>
               </div>
             </div>
           </div>
