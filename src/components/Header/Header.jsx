@@ -67,7 +67,7 @@ function Header() {
       const isEvents = location.pathname === '/events';
       const isShop = location.pathname === '/shop';
       const isCart = location.pathname === '/cart';
-      const isAdmin = location.pathname === '/admin';
+      const isAdmin = location.pathname === '/orders';
       const isProduct = location.pathname.includes('/product');
       const scrollY = window.scrollY;
       const screenHeight = window.innerHeight;

@@ -50,7 +50,7 @@ const router = createBrowserRouter([
         element: <Events />,
       },
       {
-        path: '/admin',
+        path: '/orders',
         element: <Admin />,
       },
     ],
