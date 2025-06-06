@@ -8,27 +8,45 @@ import {
 } from 'react-router-dom';
 import Home from './pages/Home/Home.jsx';
 import About from './pages/About/About.jsx';
-import CartPage from './pages/Cart/Cart.jsx';
 import ContextProvider from './Context/ContextProvider.jsx';
 import Shop from './pages/Shop/Shop.jsx';
 import Cart from './pages/Cart/Cart.jsx';
 import Product from './pages/Product/Product.jsx';
 import Events from './pages/Events/Events.jsx';
-import ScrollLayout from './components/ScrollLayout/ScrollLayout.jsx';
+import Admin from './pages/Admin/Admin.jsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <ScrollLayout />,
-    children: [
-      { index: true, element: <Home /> },
-      { path: 'home', element: <Navigate to="/" replace /> },
-      { path: 'about', element: <About /> },
-      { path: 'shop', element: <Shop /> },
-      { path: 'cart', element: <Cart /> },
-      { path: 'product/:product', element: <Product /> },
-      { path: 'events', element: <Events /> },
-    ],
+    element: <Home />,
+  },
+  {
+    path: '/home',
+    element: <Navigate to="/" replace />,
+  },
+  {
+    path: '/about',
+    element: <About />,
+  },
+  {
+    path: '/shop',
+    element: <Shop />,
+  },
+  {
+    path: '/cart',
+    element: <Cart />,
+  },
+  {
+    path: '/product/:product',
+    element: <Product />,
+  },
+  {
+    path: '/events',
+    element: <Events />,
+  },
+  {
+    path: '/admin',
+    element: <Admin />,
   },
 ]);
 

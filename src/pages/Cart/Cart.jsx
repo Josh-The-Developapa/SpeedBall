@@ -33,16 +33,13 @@ function CartPage() {
   });
 
   function formatPhoneNumber(raw) {
-    if (!raw) return '';
+    const parsed = parsePhoneNumberFromString(raw, 'UG');
+    return parsed && parsed.isValid() ? parsed.formatInternational() : raw;
+  }
 
-    const parsed = parsePhoneNumberFromString(raw, 'UG'); // fallback region if country code is missing
-    if (!parsed.isValid()) {
-      setError('Please enter a valid phone number.');
-      return;
-    }
-    if (!parsed || !parsed.isValid()) return raw;
-
-    return parsed.formatInternational(); // e.g. +256 712 345 678
+  function isPhoneNumberValid(raw) {
+    const parsed = parsePhoneNumberFromString(raw, 'UG');
+    return parsed && parsed.isValid();
   }
 
   useEffect(() => {
@@ -111,30 +108,37 @@ function CartPage() {
     const phone_number = address.phoneNumber;
 
     setLoading(true);
+    setError(''); // Clear previous error
 
-    const { error } = await supabase.from('orders').insert([
-      {
-        items: cartItems,
-        total_quantity: totalQuantity,
-        total_cost: totalCost,
-        delivery_address,
-        phone_number,
-      },
-    ]);
+    try {
+      const { error } = await supabase.from('orders').insert([
+        {
+          items: cartItems,
+          total_quantity: totalQuantity,
+          total_cost: totalCost,
+          delivery_address,
+          phone_number,
+        },
+      ]);
 
-    if (error) {
-      console.error('Supabase Insert Error:', error.message);
-      setError('Something went wrong. Please try again.');
-    } else {
+      if (error) throw new Error(error.message);
+
+      // Perform all UI changes *after* successful insertion
       localStorage.setItem('PaymentModalState', 'open');
-      setShowPaymentModal(true);
-      setCheckoutComplete(true);
-      setCartItems([]);
       localStorage.removeItem('CartItems');
-      setShowAddressOverlay(false);
-    }
 
-    setLoading(false);
+      setCartItems([]);
+      setCheckoutComplete(true);
+      setShowAddressOverlay(false);
+
+      // Delay modal display until next tick to avoid re-render loop
+      setTimeout(() => setShowPaymentModal(true), 0);
+    } catch (err) {
+      console.error('Checkout error:', err.message);
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
