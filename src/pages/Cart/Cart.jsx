@@ -33,13 +33,16 @@ function CartPage() {
   });
 
   function formatPhoneNumber(raw) {
-    const parsed = parsePhoneNumberFromString(raw, 'UG');
-    return parsed && parsed.isValid() ? parsed.formatInternational() : raw;
-  }
+    if (!raw) return '';
 
-  function isPhoneNumberValid(raw) {
-    const parsed = parsePhoneNumberFromString(raw, 'UG');
-    return parsed && parsed.isValid();
+    const parsed = parsePhoneNumberFromString(raw, 'UG'); // fallback region if country code is missing
+    if (!parsed.isValid()) {
+      setError('Please enter a valid phone number.');
+      return;
+    }
+    if (!parsed || !parsed.isValid()) return raw;
+
+    return parsed.formatInternational(); // e.g. +256 712 345 678
   }
 
   useEffect(() => {
@@ -104,41 +107,34 @@ function CartPage() {
     }
 
     const { totalQuantity, totalCost } = computeTotals(cartItems);
-    const delivery_address = `${address.fullName}, ${address.street}, ${address.cityTown}, ${address.country}`;
+    const delivery_address = `${address.fullName} \n\n ${address.street}, ${address.cityTown}, ${address.country}`;
     const phone_number = address.phoneNumber;
 
     setLoading(true);
-    setError(''); // Clear previous error
 
-    try {
-      const { error } = await supabase.from('orders').insert([
-        {
-          items: cartItems,
-          total_quantity: totalQuantity,
-          total_cost: totalCost,
-          delivery_address,
-          phone_number,
-        },
-      ]);
+    const { error } = await supabase.from('orders').insert([
+      {
+        items: cartItems,
+        total_quantity: totalQuantity,
+        total_cost: totalCost,
+        delivery_address,
+        phone_number,
+      },
+    ]);
 
-      if (error) throw new Error(error.message);
-
-      // Perform all UI changes *after* successful insertion
-      localStorage.setItem('PaymentModalState', 'open');
-      localStorage.removeItem('CartItems');
-
-      setCartItems([]);
-      setCheckoutComplete(true);
-      setShowAddressOverlay(false);
-
-      // Delay modal display until next tick to avoid re-render loop
-      setTimeout(() => setShowPaymentModal(true), 0);
-    } catch (err) {
-      console.error('Checkout error:', err.message);
+    if (error) {
+      console.error('Supabase Insert Error:', error.message);
       setError('Something went wrong. Please try again.');
-    } finally {
-      setLoading(false);
+    } else {
+      localStorage.setItem('PaymentModalState', 'open');
+      setShowPaymentModal(true);
+      setCheckoutComplete(true);
+      setCartItems([]);
+      localStorage.removeItem('CartItems');
+      setShowAddressOverlay(false);
     }
+
+    setLoading(false);
   };
 
   return (
@@ -243,12 +239,7 @@ function CartPage() {
           <div className="bg-white text-black p-6">
             {/* Address Section */}
             {showAddressOverlay && (
-              <div
-                className="fixed inset-0 bg-black bg-opacity-20 z-50 flex items-center justify-center"
-                onClick={() => {
-                  setShowAddressOverlay(false);
-                }}
-              >
+              <div className="fixed inset-0 bg-black bg-opacity-20 z-50 flex items-center justify-center">
                 <div className="bg-white text-black rounded-lg p-6 w-[90%] max-w-md relative">
                   <img
                     src={CloseIcon}

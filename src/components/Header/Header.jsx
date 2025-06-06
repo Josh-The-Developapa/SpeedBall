@@ -67,6 +67,7 @@ function Header() {
       const isEvents = location.pathname === '/events';
       const isShop = location.pathname === '/shop';
       const isCart = location.pathname === '/cart';
+      const isAdmin = location.pathname === '/admin';
       const isProduct = location.pathname.includes('/product');
       const scrollY = window.scrollY;
       const screenHeight = window.innerHeight;
@@ -88,7 +89,7 @@ function Header() {
             setIconColors('#000000');
           }
         }
-      } else if (isAbout || isEvents || isShop) {
+      } else if (isAbout || isEvents || isShop || isAdmin) {
         setLogoDisplay('block');
         setIconColors('#ffffff');
       } else if (isProduct || isCart) {
