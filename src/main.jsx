@@ -14,39 +14,46 @@ import Cart from './pages/Cart/Cart.jsx';
 import Product from './pages/Product/Product.jsx';
 import Events from './pages/Events/Events.jsx';
 import Admin from './pages/Admin/Admin.jsx';
+import ScrollLayout from './components/ScrollLayout/ScrollLayout.jsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
-  },
-  {
-    path: '/home',
-    element: <Navigate to="/" replace />,
-  },
-  {
-    path: '/about',
-    element: <About />,
-  },
-  {
-    path: '/shop',
-    element: <Shop />,
-  },
-  {
-    path: '/cart',
-    element: <Cart />,
-  },
-  {
-    path: '/product/:product',
-    element: <Product />,
-  },
-  {
-    path: '/events',
-    element: <Events />,
-  },
-  {
-    path: '/admin',
-    element: <Admin />,
+    element: <ScrollLayout />,
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
+      {
+        path: '/home',
+        element: <Navigate to="/" replace />,
+      },
+      {
+        path: '/about',
+        element: <About />,
+      },
+      {
+        path: '/shop',
+        element: <Shop />,
+      },
+      {
+        path: '/cart',
+        element: <Cart />,
+      },
+      {
+        path: '/product/:product',
+        element: <Product />,
+      },
+      {
+        path: '/events',
+        element: <Events />,
+      },
+      {
+        path: '/admin',
+        element: <Admin />,
+      },
+    ],
   },
 ]);
 
