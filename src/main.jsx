@@ -52,7 +52,6 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {/* <ScrollToTop /> */}
     <ContextProvider>
       <RouterProvider router={router} />
     </ContextProvider>
