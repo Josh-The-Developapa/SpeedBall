@@ -1,37 +1,37 @@
-import React, { useState } from "react";
-import "./Footer.css";
-import { SocialIcon } from "react-social-icons";
-import { supabase } from "../../lib/supabaseClient";
+import React, { useState } from 'react';
+import './Footer.css';
+import { SocialIcon } from 'react-social-icons';
+import { supabase } from '../../lib/supabaseClient';
 
 function Footer() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [status, setStatus] = useState(null); // null | 'loading' | 'success' | { type: 'error', message: string }
 
   const handleSubmit = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setStatus({
-        type: "error",
-        message: "Please enter a valid email address.",
+        type: 'error',
+        message: 'Please enter a valid email address.',
       });
       return;
     }
 
-    setStatus("loading");
+    setStatus('loading');
 
-    const { error } = await supabase.from("newsletter").insert([{ email }]);
+    const { error } = await supabase.from('newsletter').insert([{ email }]);
 
     if (error) {
-      console.error("Supabase error:", error);
+      console.error('Supabase error:', error);
       setStatus({
-        type: "error",
+        type: 'error',
         message:
           error.message ||
-          "An unexpected error occurred. Please try again later.",
+          'An unexpected error occurred. Please try again later.',
       });
     } else {
-      setStatus("success");
-      setEmail("");
+      setStatus('success');
+      setEmail('');
     }
   };
 
@@ -41,12 +41,18 @@ function Footer() {
       <div className="w-full md:w-[40%] flex flex-col gap-4">
         <p className="font-semibold">Connect with us</p>
         <div className="flex gap-4 text-xl">
-          {["facebook", "tiktok", "instagram", "x"].map((platform) => (
+          {[
+            'https://facebook.com',
+            'https://tiktok.com',
+            'https://instagram.com/speedball.mag',
+            'https://x.com',
+          ].map((platform) => (
             <SocialIcon
               key={platform}
               bgColor="#000000"
-              url={`https://${platform}.com`}
+              url={platform}
               className="social-icon"
+              target="_blank"
             />
           ))}
         </div>
@@ -68,14 +74,14 @@ function Footer() {
         <button
           onClick={handleSubmit}
           className="w-64 border border-white px-4 py-2 text-white hover:bg-white hover:text-black transition"
-          disabled={status === "loading"}
+          disabled={status === 'loading'}
         >
-          {status === "loading" ? "SIGNING UP..." : "SIGN UP"}
+          {status === 'loading' ? 'SIGNING UP...' : 'SIGN UP'}
         </button>
-        {status === "success" && (
+        {status === 'success' && (
           <p className="text-green-400 text-xs">You're in!</p>
         )}
-        {status?.type === "error" && (
+        {status?.type === 'error' && (
           <p className="text-red-400 text-xs">{status.message}</p>
         )}
 
