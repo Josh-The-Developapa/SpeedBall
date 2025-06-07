@@ -106,9 +106,23 @@ function CartPage() {
       return;
     }
 
+    // Ensure all fields are filled
+    const { fullName, cityTown, street, phoneNumber } = address;
+    if (!fullName || !cityTown || !street || !phoneNumber) {
+      setError('Please fill in all delivery information fields.');
+      return;
+    }
+
+    // Optional: Validate phone number format
+    const parsedPhone = parsePhoneNumberFromString(phoneNumber, 'UG');
+    if (!parsedPhone || !parsedPhone.isValid()) {
+      setError('Please enter a valid phone number.');
+      return;
+    }
+
     const { totalQuantity, totalCost } = computeTotals(cartItems);
-    const delivery_address = `${address.fullName} \n\n ${address.street}, ${address.cityTown}, ${address.country}`;
-    const phone_number = address.phoneNumber;
+    const delivery_address = `${fullName} \n\n ${street}, ${cityTown}, ${address.country}`;
+    const phone_number = parsedPhone.formatInternational();
 
     setLoading(true);
 
@@ -299,7 +313,22 @@ function CartPage() {
                     />
                     <button
                       onClick={handleCheckout}
-                      className="w-full mt-4 bg-[#3B4CCA] text-white py-3 rounded-lg font-semibold hover:bg-[#2A3BB7]"
+                      disabled={
+                        !address.fullName ||
+                        !address.cityTown ||
+                        !address.street ||
+                        !address.phoneNumber ||
+                        cartItems.length === 0
+                      }
+                      className={`w-full mt-4 bg-[#3B4CCA] text-white py-3 rounded-lg font-semibold hover:bg-[#2A3BB7] ${
+                        !address.fullName ||
+                        !address.cityTown ||
+                        !address.street ||
+                        !address.phoneNumber ||
+                        cartItems.length === 0
+                          ? 'opacity-50 cursor-not-allowed'
+                          : 'hover:bg-gray-900'
+                      }`}
                     >
                       CONFIRM & ORDER
                     </button>
