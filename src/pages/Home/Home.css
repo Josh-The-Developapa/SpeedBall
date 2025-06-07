@@ -8,7 +8,7 @@
   padding: 0;
 }
 
-#shop-button:hover{
+#shop-button:hover {
   background-color: #000000;
   color: #fff;
 }
@@ -127,7 +127,7 @@
   transition: all 0.25s ease;
 }
 
-.button:hover{
+.button:hover {
   color: #fff;
   background-color: #000;
   transition: all 0.25s ease;
@@ -224,7 +224,7 @@
 
 @media screen and (max-width: 500px) {
   .section-1 {
-    background-image: url(../../assets/mobile-hero.svg);
+    background-image: url(../../assets/mobile-hero.webp);
   }
 
   .Black-box-tilted {

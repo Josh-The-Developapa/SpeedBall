@@ -1,5 +1,5 @@
 .events-hero {
-  background-image: url('../../assets/events-hero.jpg');
+  background-image: url('../../assets/events-hero.webp');
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -62,7 +62,7 @@
   border-radius: 5px;
 }
 
-.events-button:hover{
+.events-button:hover {
   border: none;
   background-color: #000000;
   color: #fff;
@@ -77,7 +77,7 @@
   color: #ffffff;
 }
 
-#shop-merch-button:hover{
+#shop-merch-button:hover {
   background-color: #000000;
 }
 

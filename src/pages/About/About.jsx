@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import hero from '../../assets/about-hero.svg';
+import hero from '../../assets/about-hero.webp';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 

@@ -8,7 +8,7 @@ import Context from '../../Context/Context';
 import Product1 from '../../assets/full-fit.svg';
 import Product2 from '../../assets/jacket.svg';
 import Product3 from '../../assets/jeans.svg';
-import Hero from '../../assets/denim-jeans.svg';
+import Hero from '../../assets/denim-jeans.webp';
 
 // Swiper stuff
 import { Swiper, SwiperSlide } from 'swiper/react';
