@@ -10,15 +10,15 @@ export default function AboutPage() {
 
       <section className="flex flex-col xl:flex-row flex-grow about-section ">
         {/* Image Section */}
-        <div className="about-image-div relative xl:w-[75%] xl:h-[990px] h-[990px]">
+        <div className="about-image-div relative xl:w-[75%] xl:h-[900px] h-[700px]">
           <img
             src={hero}
             alt="Hero"
-            className="w-full h-[990px] object-cover object-top object-right"
+            className="w-full xl:h-[900px] object-cover object-top object-right h-[700px]"
           />
 
           {/* Mobile Fade */}
-          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black to-transparent xl:hidden pointer-events-none fade-overlay mobile-fade" />
+          <div className="absolute inset-x-0 bottom-0 xl:h-1/2 bg-gradient-to-t from-black to-transparent xl:hidden pointer-events-none fade-overlay mobile-fade h-[500px]" />
 
           {/* Desktop Fade */}
           <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-black to-transparent hidden xl:block pointer-events-none fade-overlay desktop-fade" />
@@ -26,7 +26,7 @@ export default function AboutPage() {
 
         {/* Text Section */}
         <div
-          className="w-full xl:w-[40%] px-6 py-12 xl:py-24 xl:px-12 text-base xl:text-lg leading-relaxed space-y-6 overflow-y-auto text-content"
+          className="w-full xl:w-[40%] px-6 py-0 xl:py-18 xl:px-12 text-base xl:text-lg leading-relaxed space-y-6 overflow-y-auto text-content"
           id="text-section"
         >
           <p>
@@ -50,7 +50,6 @@ export default function AboutPage() {
             nightlife architects, and city-dwellers who treat movement as
             performance.
           </p>
-
           <p className="mb-6">
             Beyond the garment, Speedball functions as a cultural engine. We
             curate events, incubate local talent, and redefine how African
