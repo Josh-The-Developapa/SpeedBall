@@ -7,7 +7,6 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col about-page">
       <Header />
-
       <section className="flex flex-col xl:flex-row flex-grow about-section ">
         {/* Image Section */}
         <div className="about-image-div relative xl:w-[75%] xl:h-[900px] h-[700px]">
