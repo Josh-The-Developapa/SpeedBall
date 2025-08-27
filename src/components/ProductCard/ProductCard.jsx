@@ -1,280 +1,153 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import './ProductCard.css';
-import Context from '../../Context/Context';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Plus } from 'lucide-react';
+// import Context from '../../Context/Context';
 
 export default function ProductCard(props) {
-  const ctx = useContext(Context);
+  // const ctx = useContext(Context);
   const navigate = useNavigate();
-  const productFormattedName = props.product.replace(/\s+/g, '-').toLowerCase();
+  const productFormattedName =
+    props.product?.replace(/\s+/g, '-').toLowerCase() || 'sample-product';
   const [selectedSize, setSelectedSize] = useState('');
-  const [sizeJustAdded, setSizeJustAdded] = useState(false);
-  const [buttonText, setButtonText] = useState('ADD TO CART');
+  const [showAdded, setShowAdded] = useState(false);
   const sizes = ['M', 'L', 'XL', '2XL'];
 
   const handleAddToCart = () => {
-    // Debug log before processing
-    console.log('Add to cart clicked for:', {
-      product: props.product,
-      price: props.price,
-      size: selectedSize || 'Not selected',
-    });
-
+    // cart logic
     const sanitizedPrice = parseInt(
-      props.price
+      (props.price || '25000')
         .toString()
-        .replace(/UGX\s*/gi, '') // Remove any "UGX" (case-insensitive) and following spaces
-        .replace(/[^0-9]/g, ''), // Remove any non-digit characters
+        .replace(/UGX\s*/gi, '')
+        .replace(/[^0-9]/g, ''),
       10
     );
 
     const product = {
-      title: props.product,
+      title: props.product || 'Sample Product',
       price: sanitizedPrice,
-      image: props.image.split('?')[0],
+      image: (
+        props.image ||
+        'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=600&fit=crop'
+      ).split('?')[0],
       quantity: 1,
       size: selectedSize || sizes[0],
     };
 
-    // Trigger cart animation
-    if (ctx.setAnimateCart) {
-      ctx.setAnimateCart(true);
-      setTimeout(() => {
-        ctx.setAnimateCart(false);
-      }, 1000);
+    try {
+      const existingCartItems =
+        JSON.parse(localStorage.getItem('CartItems')) || [];
+      const existingProductIndex = existingCartItems.findIndex(
+        (item) => item.title === product.title && item.size === product.size
+      );
+
+      if (existingProductIndex !== -1) {
+        existingCartItems[existingProductIndex].quantity += 1;
+      } else {
+        existingCartItems.push(product);
+      }
+
+      localStorage.setItem('CartItems', JSON.stringify(existingCartItems));
+      console.log('Added to cart:', product);
+    } catch (error) {
+      console.error('Error saving to cart:', error);
     }
 
-    // Get existing cart items
-    const existingCartItems =
-      JSON.parse(localStorage.getItem('CartItems')) || [];
-    console.log('Existing cart items:', existingCartItems);
+    // animation trigger
+    setShowAdded(true);
+    setTimeout(() => setShowAdded(false), 2000);
+  };
 
-    // Check if product exists
-    const existingProductIndex = existingCartItems.findIndex(
-      (item) => item.title === product.title && item.size === product.size
-    );
-
-    if (existingProductIndex !== -1) {
-      existingCartItems[existingProductIndex].quantity += 1;
-      console.log('Increased quantity for existing product');
+  const handleProductClick = () => {
+    if (navigate) {
+      navigate(`/product/${productFormattedName}`);
     } else {
-      existingCartItems.push(product);
-      console.log('Added new product to cart');
+      console.log('Navigate to:', `/product/${productFormattedName}`);
     }
-
-    // Update storage
-    localStorage.setItem('CartItems', JSON.stringify(existingCartItems));
-    console.log('Updated cart:', existingCartItems);
-
-    // Reset size selection
-    setSizeJustAdded(true);
-    setTimeout(() => {
-      setSelectedSize('');
-      setSizeJustAdded(false);
-    }, 100);
-
-    // Update button feedback
-    setButtonText('ADDED!');
-    setTimeout(() => {
-      setButtonText('ADD TO CART');
-    }, 2000);
-
-    // Debug log after processing
-    console.log('Order processed:', product);
   };
 
   return (
-    <div className="bg-zinc-900 text-white  p-4 w-72 space-y-4 product-card">
-      {/* Image Placeholder */}
-      <div className="w-full h-48 bg-zinc-800 rounded-xl flex items-center justify-center image-holder">
+    <div className="w-full max-w-sm mx-auto">
+      {/* Image Container */}
+      <div className="relative w-full overflow-hidden">
         <img
           src={props.image}
-          className="product-card-image"
-          style={props.image_dimensions}
           alt={props.product}
-          onClick={() => navigate(`/product/${productFormattedName}`)}
+          onClick={handleProductClick}
+          className="w-full h-[400px] object-cover cursor-pointer transition-transform duration-300 hover:scale-105"
         />
       </div>
 
-      {/* Product Name */}
+      {/* Product Title */}
       <h2
-        className="text-lg font-bold product-card-title"
-        onClick={() => navigate(`/product/${productFormattedName}`)}
+        onClick={handleProductClick}
+        className="text-lg sm:text-xl font-normal text-black mb-2 mt-[15px] cursor-pointer hover:text-gray-700 transition-colors duration-200 line-clamp-2"
       >
-        {props.product}
+        {props.product || 'Sample Product'}
       </h2>
 
       {/* Price */}
-      <p className="text-lg text-white-400 font-bold price">{props.price}</p>
+      <p className="text-gray-600 text-sm sm:text-base font-medium mb-4 sm:mb-6">
+        UGX {props.price || '25000'}
+      </p>
 
-      {/* Size Selection */}
-      <div className="flex flex-wrap gap-2">
-        {sizes.map((size) => (
-          <button
-            key={size}
-            onClick={() => {
-              setSelectedSize(size);
-              console.log('Size selected:', size); // Debug log for size selection
-            }}
-            className={`px-3 py-1 rounded-md border sizes ${
-              selectedSize === size && !sizeJustAdded
-                ? 'border-white shadow-[0_0_0_2px_white]' // Permanent hover style
-                : //? 'bg-blue-500 text-white border-blue-500'
-                  'border-zinc-600 text-gray-300 hover:border-white hover:shadow-[0_0_0_2px_white]'
-            } transition-all duration-250`}
+      {/* Sizes and Cart Button */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+        {/* Size Buttons */}
+        <div className="flex gap-1 sm:gap-2 flex-wrap">
+          {sizes.map((size) => (
+            <button
+              key={size}
+              onClick={() => setSelectedSize(size)}
+              style={{ borderRadius: '0px' }}
+              className={`
+                px-2 sm:px-3 py-1 sm:py-3 text-xs sm:text-sm font-medium border transition-all duration-200
+                ${
+                  selectedSize === size
+                    ? 'border-black text-black font-bold'
+                    : 'border-gray-400 text-gray-600 hover:border-gray-600'
+                }
+              `}
+            >
+              {size}
+            </button>
+          ))}
+        </div>
+
+        {/* Add to Cart Button */}
+        <button
+          onClick={handleAddToCart}
+          style={{ borderRadius: '0px' }}
+          className="flex items-center justify-center gap-2 min-w-[45px] h-9 sm:h-10 px-3 bg-black text-white rounded-none hover:bg-gray-800 transition-colors duration-200 overflow-hidden"
+        >
+          {/* Plus Icon with Animation */}
+          <motion.div
+            key={showAdded ? 'plus-anim' : 'plus-idle'}
+            initial={{ rotate: 0, x: 0 }}
+            animate={showAdded ? { rotate: 360, x: -10 } : { rotate: 0, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex-shrink-0"
           >
-            {size}
-          </button>
-        ))}
-      </div>
+            <Plus size={18} />
+          </motion.div>
 
-      {/* Add to Cart Button */}
-      <button
-        // className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl transition .cart-button"
-        className="w-full text-white py-2 rounded-xl transition cart-button"
-        onClick={handleAddToCart}
-      >
-        {buttonText}
-      </button>
+          {/* Added to Cart Text */}
+          <AnimatePresence>
+            {showAdded && (
+              <motion.span
+                key="added-text"
+                initial={{ x: 40, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: 40, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="whitespace-nowrap text-xs sm:text-sm font-medium"
+              >
+                Added to Cart
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </button>
+      </div>
     </div>
   );
 }
-
-// export default function ProductCard(props) {
-//   const ctx = useContext(Context);
-//   const navigate = useNavigate();
-//   const productFormattedName = props.product.replace(/\s+/g, "-").toLowerCase();
-//   const [selectedSize, setSelectedSize] = useState("");
-//   const [sizeJustAdded, setSizeJustAdded] = useState(false);
-//   const [buttonText, setButtonText] = useState("ADD TO CART");
-//   const sizes = ["M", "L", "XL", "2XL"];
-
-//   const handleAddToCart = () => {
-//     // Debug log before processing
-//     console.log("Add to cart clicked for:", {
-//       product: props.product,
-//       price: props.price,
-//       size: selectedSize || "Not selected",
-//     });
-
-//     const sanitizedPrice = parseInt(
-//       props.price
-//         .toString()
-//         .replace(/UGX\s*/gi, "") // Remove any "UGX" (case-insensitive) and following spaces
-//         .replace(/[^0-9]/g, ""), // Remove any non-digit characters
-//       10
-//     );
-
-//     const product = {
-//       title: props.product,
-//       price: sanitizedPrice,
-//       image: props.image.split("?")[0],
-//       quantity: 1,
-//       size: selectedSize || sizes[0],
-//     };
-
-//     // Trigger cart animation
-//     if (ctx.setAnimateCart) {
-//       ctx.setAnimateCart(true);
-//       setTimeout(() => {
-//         ctx.setAnimateCart(false);
-//       }, 1000);
-//     }
-
-//     // Get existing cart items
-//     const existingCartItems =
-//       JSON.parse(localStorage.getItem("CartItems")) || [];
-//     console.log("Existing cart items:", existingCartItems);
-
-//     // Check if product exists
-//     const existingProductIndex = existingCartItems.findIndex(
-//       (item) => item.title === product.title && item.size === product.size
-//     );
-
-//     if (existingProductIndex !== -1) {
-//       existingCartItems[existingProductIndex].quantity += 1;
-//       console.log("Increased quantity for existing product");
-//     } else {
-//       existingCartItems.push(product);
-//       console.log("Added new product to cart");
-//     }
-
-//     // Update storage
-//     localStorage.setItem("CartItems", JSON.stringify(existingCartItems));
-//     console.log("Updated cart:", existingCartItems);
-
-//     // Reset size selection
-//     setSizeJustAdded(true);
-//     setTimeout(() => {
-//       setSelectedSize("");
-//       setSizeJustAdded(false);
-//     }, 100);
-
-//     // Update button feedback
-//     setButtonText("ADDED!");
-//     setTimeout(() => {
-//       setButtonText("ADD TO CART");
-//     }, 2000);
-
-//     // Debug log after processing
-//     console.log("Order processed:", product);
-//   };
-
-//   return (
-//     <div className="bg-zinc-900 text-white  p-4 w-72 space-y-4 product-card">
-//       {/* Image Placeholder */}
-//       <div className="w-full h-48 bg-zinc-800 rounded-xl flex items-center justify-center image-holder">
-//         <img
-//           src={props.image}
-//           className="product-card-image"
-//           style={props.image_dimensions}
-//           alt={props.product}
-//         />
-//       </div>
-
-//       {/* Product Name */}
-//       <h2
-//         className="text-lg font-semibold product-card-title"
-//         onClick={() => navigate(`/product/${productFormattedName}`)}
-//       >
-//         {props.product}
-//       </h2>
-
-//       {/* Price */}
-//       <p className="text-lg text-white-400 font-bold price">
-//         UGX {props.price}
-//       </p>
-
-//       {/* Size Selection */}
-//       <div className="flex flex-wrap gap-2">
-//         {sizes.map((size) => (
-//           <button
-//             key={size}
-//             onClick={() => {
-//               setSelectedSize(size);
-//               console.log("Size selected:", size); // Debug log for size selection
-//             }}
-//             className={`px-3 py-1 rounded-md border sizes ${
-//               selectedSize === size && !sizeJustAdded
-//                 ? "border-white shadow-[0_0_0_2px_white]" // Permanent hover style
-//                 : //? 'bg-blue-500 text-white border-blue-500'
-//                   "border-zinc-600 text-gray-300 hover:border-white hover:shadow-[0_0_0_2px_white]"
-//             } transition-all duration-250`}
-//           >
-//             {size}
-//           </button>
-//         ))}
-//       </div>
-
-//       {/* Add to Cart Button */}
-//       <button
-//         className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl transition"
-//         // className="w-full text-white py-2 rounded-xl transition cart-button"
-//         onClick={handleAddToCart}
-//       >
-//         {buttonText}
-//       </button>
-//     </div>
-//   );
-// }

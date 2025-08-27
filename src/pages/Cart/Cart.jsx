@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiCheckCircle } from 'react-icons/fi';
 import { ImSpinner9 } from 'react-icons/im';
-import hero from '../../assets/speedball-homepage-laptop.jpeg';
+import hero from '../../assets/RS2.jpg';
 import Header from '../../components/Header/Header.jsx';
 import Footer from '../../components/Footer/Footer.jsx';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';

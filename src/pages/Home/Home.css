@@ -1,4 +1,4 @@
-.Body-container {
+.body-container {
   position: absolute;
   top: 0;
   left: 0;
@@ -8,241 +8,274 @@
   padding: 0;
 }
 
-#shop-button:hover {
-  background-color: #000000;
-  color: #fff;
-}
-
-.Black-box-tilted {
-  height: 65vh;
-  width: 100vw;
-  background-color: black;
-  opacity: 0.5;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  z-index: 100;
-  margin: 0;
-
-  /* Keep top edge at a fixed 10° angle */
-  clip-path: polygon(0 calc(18.5vw), 100% 0, 100% 100%, 0% 100%);
-}
-
-.Blue-box {
-  height: 100vh;
-  width: 100vw;
-  background-color: #001935;
-  opacity: 0.5;
-  position: relative; /* changed from relative */
-  top: 0;
-  left: 0;
-  z-index: 50; /* higher than SB-logo-sign */
-}
-
+/* Hero */
 .section-1 {
-  background-image: url(../../assets/speedball-homepage-laptop.jpeg);
+  background-image: url(../../assets/Hero.png);
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  background-size: cover;
   width: 100%;
   height: 100vh;
-  max-height: 100vh;
-  object-fit: cover;
-  will-change: transform;
-  min-height: 100vh;
-  background-position: top right;
-  background-repeat: no-repeat;
-  background-size: cover;
-  margin: 0;
 }
 
-.section-3 {
-  background-image: url(../../assets/HomePage-Section3.svg);
-  width: 100%;
-  object-fit: cover;
-  /* will-change: transform; */
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-position: center right;
-  background-repeat: no-repeat;
-  background-size: cover;
-  margin: 0;
-}
-
+/* Products */
 .section-2 {
-  background-color: #232323;
+  background-color: #fcfbf8;
   width: 100%;
-  padding: 0px;
-  /* min-height: 100vh; */
-  /* max-height: 100vh; */
-  height: 100svh;
-  box-sizing: border-box;
-  /* position: relative; */
-}
-
-.SB-text-container {
+  padding: 65px 64px 0;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
   height: 100vh;
-  /* background-color: green; */
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 100;
+  box-sizing: border-box;
+  position: relative;
 }
 
-.SB-text-div {
-  position: absolute;
+.product-swiper {
   width: 100%;
-  height: 300px;
+  /* padding-bottom: 4rem; */
+  max-height: 100vh;
+}
+
+/* Swiper Pagination Styles */
+.product-swiper .swiper-pagination {
+  bottom: 30px !important;
+  /* position: absolute !important; */
+  text-align: center;
+}
+
+.custom-bullet {
+  width: 12px !important;
+  height: 12px !important;
+  background-color: #ccc !important;
+  border-radius: 50% !important;
+  margin: 0 6px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  opacity: 1 !important;
+  display: inline-block !important;
+}
+
+.custom-bullet-active {
+  background-color: #000 !important;
+  transform: scale(1.2) !important;
+}
+
+/* Branding Section - Fixed Layout */
+.section-3 {
+  background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
+  padding: 60px 40px;
+}
+
+.section-3-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.section-3-image {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 3/4;
+  border: 2px solid #000000;
+}
+
+.section-3-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.speedball-logo-and-text-container {
+  flex: 0 0 auto;
+  display: flex;
   flex-direction: column;
-  z-index: 100;
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 350px;
+  width: 100%;
+  padding: 0 20px;
 }
 
-.speedball-text {
-  background-image: url(../../assets/SPEEBALL/logo/logo-bw.svg);
-  width: 95vw; /* TRY THIS */
-  max-width: 525px;
-  height: 210px;
-  z-index: 100;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  margin-bottom: 20px;
+.speedball-logo {
+  height: auto;
+  width: 200px;
+  max-width: 100%;
+  object-fit: contain;
+  margin-bottom: 30px;
 }
 
+.section-3-text {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 30px;
+  text-align: left;
+  max-width: 100%;
+}
+
+/* Buttons */
 .button {
-  background-color: #ffffff;
-  color: #000000;
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  background-color: #e8e3d3;
+  color: #000;
+  padding: 12px 24px;
+  font-weight: 500;
+  letter-spacing: 1px;
   transition: all 0.25s ease;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+  border: none;
+  font-family: inherit;
 }
 
 .button:hover {
   color: #fff;
   background-color: #000;
-  transition: all 0.25s ease;
 }
 
-.section-3-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  bottom: 10;
-  left: 0;
-  z-index: 100;
-}
-
-.speedball-logo {
-  background-image: url(../../assets/sb-sig.svg);
-  height: 220px;
-  width: 280px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  margin-bottom: 20px;
-  margin-left: 0px;
-  margin-right: 0px;
-}
-
-.speedball-logo-and-text-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 300px;
-  position: relative;
-  right: 15%;
-}
-
-.product-swiper {
-  position: relative;
-  width: 100%;
-  padding-bottom: 3rem; /* add space for dots */
-}
-
-/* Dots visible and positioned */
-.product-swiper .swiper-pagination {
-  position: relative;
-  bottom: 10px;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  margin-top: 20px;
-}
-
-/* Dot style */
-.product-swiper .swiper-pagination-bullet {
-  width: 10px;
-  height: 10px;
-  margin: 0 6px;
-  background: #ffffff;
-  opacity: 0.4;
-  border-radius: 50%;
-  transition: opacity 0.3s ease;
-}
-
-/* Active dot */
-.product-swiper .swiper-pagination-bullet-active {
-  opacity: 1;
-  background: #ffffff;
-}
-
-@media screen and (min-width: 1024px) {
-  .product-swiper .swiper-pagination-bullet {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 400px) {
-  .speedball-logo-and-text-container {
-    right: 0;
-    margin: 0;
-  }
-  .section-3-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-}
-
-@media screen and (max-width: 500px) {
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+  /* Hero */
   .section-1 {
-    background-image: url(../../assets/mobile-hero.webp);
+    background-image: url(../../assets/Full-Fit.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 100vh;
   }
 
-  .Black-box-tilted {
-    display: none;
+  .section-2 {
+    padding: 65px 15px;
   }
 
-  #shop-button {
-    display: none;
+  .section-3-container {
+    gap: 40px;
+    max-width: 900px;
   }
 
-  .speedball-text {
-    background-image: url(../../assets/sb-icon.svg);
-    width: 320px;
+  .section-3-image {
+    max-width: 350px;
+  }
+
+  .speedball-logo-and-text-container {
+    max-width: 320px;
+  }
+
+  .speedball-logo {
+    width: 180px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .section-2 {
+    padding: 40px 15px;
+  }
+
+  .product-swiper {
+    padding-bottom: 3rem;
+  }
+
+  .section-3 {
+    padding: 40px 20px;
+    min-height: auto;
+  }
+
+  .section-3-container {
+    flex-direction: column;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .section-3-image {
+    order: 1;
+    max-width: 300px;
+  }
+
+  .speedball-logo-and-text-container {
+    order: 2;
+    align-items: center;
+    text-align: center;
+    padding: 0;
+    max-width: 100%;
+  }
+
+  .speedball-logo {
+    width: 160px;
+    margin-bottom: 25px;
+  }
+
+  .section-3-text {
+    text-align: center;
+    font-size: 15px;
+    max-width: 400px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .section-2 {
+    padding: 30px 15px;
+  }
+
+  .section-3 {
+    padding: 30px 15px;
+  }
+
+  .section-3-container {
+    gap: 30px;
+  }
+
+  .section-3-image {
+    max-width: 280px;
+  }
+
+  .speedball-logo {
+    width: 140px;
+    margin-bottom: 20px;
+  }
+
+  .section-3-text {
+    font-size: 14px;
+    margin-bottom: 25px;
+    max-width: 300px;
+  }
+
+  .button {
+    padding: 10px 20px;
+    font-size: 14px;
   }
 }
 
 @media screen and (max-width: 390px) {
-  .speedball-text {
-    display: none;
+  .section-3 {
+    padding: 25px 12px;
+  }
+
+  .section-3-image {
+    max-width: 250px;
+    aspect-ratio: 4/5;
+  }
+
+  .speedball-logo {
+    width: 120px;
+  }
+
+  .section-3-text {
+    font-size: 13px;
+    max-width: 280px;
+  }
+
+  .custom-bullet {
+    width: 10px !important;
+    height: 10px !important;
+    margin: 0 4px !important;
   }
 }

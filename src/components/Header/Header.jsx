@@ -19,7 +19,7 @@ function Header() {
   const [iconColors, setIconColors] = useState(initialIconColor);
 
   // Logo is always displayed on all pages by default
-  const [logoDisplay, setLogoDisplay] = useState('none');
+  const [logoDisplay, setLogoDisplay] = useState('block');
 
   // Menu color state (though it seems tied to iconColors in your current setup)
   const [menuColor, setMenuColor] = useState('#ffffff'); // Keep this if menu color can be different
@@ -86,7 +86,7 @@ function Header() {
         if (scrolledPast90vh) {
           // Regardless of width, always white
           setLogoDisplay('block');
-          setIconColors('#ffffff');
+          setIconColors('#897245');
         } else {
           if (screenWidth < 390) {
             // Less than 90vh AND small screen
@@ -94,13 +94,13 @@ function Header() {
             setLogoDisplay('block');
             setIconColors('#000000');
           } else {
-            setLogoDisplay('none');
+            setLogoDisplay('block');
             setIconColors('#000000');
           }
         }
       } else if (isAbout || isEvents || isShop || isAdmin) {
         setLogoDisplay('block');
-        setIconColors('#ffffff');
+        setIconColors('#000000');
       } else if (isProduct || isCart) {
         setLogoDisplay('block');
         setIconColors('#000000');
@@ -122,7 +122,10 @@ function Header() {
   }, [location, window.scrollY, window.innerWidth]);
 
   return (
-    <div className="Header" style={{ backgroundColor: isAbout ? 'black' : '' }}>
+    <div
+      className="Header"
+      style={{ backgroundColor: isAbout ? 'transparent' : '' }}
+    >
       <div
         className="backdrop"
         style={{ display: context.isDrop ? 'block' : 'none' }}

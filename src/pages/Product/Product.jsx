@@ -33,15 +33,15 @@ function Product() {
 
   const productInfo = {
     0: {
-      title: 'Denim Campaign Full Fit',
-      price: '45,000 UGX',
+      title: 'Black Denim Full Fit',
+      price: '120,000 UGX',
       image: Product1,
     },
     1: { title: 'Denim Campaign Jacket', price: '45,000 UGX', image: Product2 },
     2: { title: 'Denim Campaign Jeans', price: '45,000 UGX', image: Product3 },
   };
 
-  if (product === 'denim-campaign-full-fit') {
+  if (product === 'black-denim-full-fit') {
     ({
       title: product_title,
       image: product_image,
