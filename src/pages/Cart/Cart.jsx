@@ -405,10 +405,10 @@ function CartPage() {
                     <strong>only</strong> to the following numbers:
                   </p>
 
-                  <ul className="mb-4 text-blue-700 font-bold text-lg space-y-1">
-                    <li>â€¢ +256 770 000000</li>
-                    <li>â€¢ +256 701 111111</li>
-                  </ul>
+<ul className="mb-4 text-blue-700 font-bold text-lg space-y-1">
+  <li>+256 770 000000</li>
+  <li>+256 701 111111</li>
+</ul>
 
                   <p className="mb-2 text-sm text-gray-800">
                     Your contact number:
