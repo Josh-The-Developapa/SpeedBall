@@ -1,52 +1,86 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './Shop.css';
+import { Context } from '../../Context/Context';
+// Components
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import ProductCard from '../../components/ProductCard/ProductCard';
 // Assets
-import Product1 from '../../assets/Full-Fit.jpg';
-import Product2 from '../../assets/jacket.svg';
-import Product3 from '../../assets/jeans.svg';
-// Swiper stuff
+import Product3 from '../../assets/Black-Jacket.jpg';
+import Product4 from '../../assets/Brown-Jacket.jpg';
+import Product5 from '../../assets/Black-pants.png';
+import Product6 from '../../assets/Brown-Pants.jpg';
+import Product7 from '../../assets/Brown-Jorts.png';
+import Product8 from '../../assets/Tank.png';
+
+// Second Product Images
+import Product10 from '../../assets/Brown-Jacket2.png';
+import Product11 from '../../assets/Black-pants2.png';
+import Product12 from '../../assets/Black-Jacket2.jpg';
+
+// Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
 function Shop() {
+  const ctx = useContext(Context);
+
+  // Organized product data with multiple images for each product
   const products = [
     {
-      id: 1,
-      name: 'Denim Campaign Full Fit',
-      price: 45000,
-      image: Product1,
-      sizes: ['M', 'L', 'XL'],
-      imageDimensions: { height: '100%', width: '100%', objectFit: 'cover' },
-    },
-    {
-      id: 2,
-      name: 'Denim Campaign Jacket',
-      price: 45000,
-      image: Product2,
-      sizes: ['M', 'L', 'XL'],
-      imageDimensions: { height: '100%', width: '100%' },
-    },
-    {
       id: 3,
-      name: 'Denim Campaign Jeans',
-      price: 45000,
-      image: Product3,
-      sizes: ['28', '30', '32', '34'],
-      imageDimensions: { height: '100%', width: '100%', objectFit: 'cover' },
+      name: 'Black Jacket',
+      price: 60000,
+      images: [Product12, Product3], // Multiple images
+      sizes: ['L', 'XL', 'XXL'],
+    },
+    {
+      id: 4,
+      name: 'Brown Jacket',
+      price: 60000,
+      images: [Product4, Product10], // Multiple images
+      sizes: ['L', 'XL', 'XXL'],
+    },
+    {
+      id: 5,
+      name: 'Black Pants',
+      price: 60000,
+      images: [Product5, Product11], // Multiple images
+      sizes: ['L', 'XL', 'XXL'],
+    },
+    {
+      id: 6,
+      name: 'Brown Pants',
+      price: 60000,
+      images: [Product6], // Single image
+      sizes: ['L', 'XL', 'XXL'],
+    },
+    {
+      id: 7,
+      name: 'Brown Jorts',
+      price: 60000,
+      images: [Product7], // Single image
+      sizes: ['L', 'XL', 'XXL'],
+    },
+    {
+      id: 8,
+      name: 'Tank Top',
+      price: 35000,
+      images: [Product8], // Single image
+      sizes: ['S', 'M', 'L'],
     },
   ];
 
   return (
     <div className="shop-body-container">
       <Header />
+
+      {/* Product Carousel - copied from Home section-2 */}
       <div className="shop-section section-2" id="products-section">
         <Swiper
-          modules={[Autoplay, Pagination]}
+          modules={[Pagination]}
           spaceBetween={30}
           loop
           autoplay={{ delay: 3000, disableOnInteraction: false }}
@@ -66,16 +100,17 @@ function Shop() {
           {products.map((product) => (
             <SwiperSlide key={product.id}>
               <ProductCard
+                id={product.id}
                 product={product.name}
-                price={product.price.toLocaleString('en-US')}
-                image={product.image}
-                image_dimensions={product.imageDimensions}
+                price={product.price}
+                images={product.images}
                 sizes={product.sizes}
               />
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
+
       <Footer />
     </div>
   );

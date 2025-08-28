@@ -98,10 +98,10 @@ function Header() {
             setIconColors('#000000');
           }
         }
-      } else if (isAbout || isEvents || isShop || isAdmin) {
+      } else if (isAbout || isEvents || isAdmin) {
         setLogoDisplay('block');
-        setIconColors('#000000');
-      } else if (isProduct || isCart) {
+        setIconColors('#ffffff');
+      } else if (isProduct || isCart || isShop) {
         setLogoDisplay('block');
         setIconColors('#000000');
       }

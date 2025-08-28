@@ -8,11 +8,20 @@ import ProductCard from '../../components/ProductCard/ProductCard';
 // Assets
 import YourModelImage from '../../assets/RS2.jpg';
 import RandomShi from '../../assets/rando-shi.png';
-import Product1 from '../../assets/Black-Denim-Full-Fit.jpg';
-import Product2 from '../../assets/JACKET2.png';
-import Product3 from '../../assets/PANTS.png';
-import Product4 from '../../assets/JORTS.png';
-import Product5 from '../../assets/TANK 1.png';
+// import Product1 from '../../assets/Black-Full-Fit.jpg';
+// import Product2 from '../../assets/Brown-Full-Fit.jpg';
+import Product3 from '../../assets/Black-Jacket.jpg';
+import Product4 from '../../assets/Brown-Jacket.jpg';
+import Product5 from '../../assets/Black-pants.png';
+import Product6 from '../../assets/Brown-Pants.jpg';
+import Product7 from '../../assets/Brown-Jorts.png';
+import Product8 from '../../assets/Tank.png';
+
+// Second Product Images
+import Product10 from '../../assets/Brown-Jacket2.png';
+import Product11 from '../../assets/Black-pants2.png';
+import Product12 from '../../assets/Black-Jacket2.jpg';
+
 // Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
@@ -23,55 +32,78 @@ import { Link } from 'react-router-dom';
 
 function Home() {
   const ctx = useContext(Context);
+
+  // Organized product data with multiple images for each product
   const products = [
-    {
-      id: 1,
-      name: 'Black Denim Full Fit',
-      price: 120000,
-      image: Product1,
-      sizes: ['M', 'L', 'XL'],
-      hoverPic: Product1,
-      imageDimensions: { height: '100%', width: '100%', objectFit: 'cover' },
-    },
-    {
-      id: 2,
-      name: 'Leather Jacket',
-      price: 60000,
-      image: Product2,
-      sizes: ['M', 'L', 'XL'],
-    },
+    // {
+    //   id: 1,
+    //   name: 'Black Full Fit',
+    //   price: 120000,
+    //   images: [Product1], // Add more images as array when available
+    //   sizes: ['L', 'XL', 'XXL'],
+    // },
+    // {
+    //   id: 2,
+    //   name: 'Brown Full Fit',
+    //   price: 120000,
+    //   images: [Product2], // Add more images as array when available
+    //   sizes: ['L', 'XL', 'XXL'],
+    // },
     {
       id: 3,
-      name: 'Pants',
+      name: 'Black Jacket',
       price: 60000,
-      image: Product3,
-      sizes: ['28', '30', '32', '34'],
+      images: [Product12, Product3], // Add more images as array when available
+      sizes: ['L', 'XL', 'XXL'],
     },
     {
       id: 4,
-      name: 'Jorts',
+      name: 'Brown Jacket',
       price: 60000,
-      image: Product4,
-      sizes: ['28', '30', '32', '34'],
+      images: [Product4, Product10], // Add more images as array when available
+      sizes: ['L', 'XL', 'XXL'],
     },
     {
       id: 5,
+      name: 'Black Pants',
+      price: 60000,
+      images: [Product5, Product11], // Add more images as array when available
+      sizes: ['L', 'XL', 'XXL'],
+    },
+    {
+      id: 6,
+      name: 'Brown Pants',
+      price: 60000,
+      images: [Product6], // Add more images as array when available
+      sizes: ['L', 'XL', 'XXL'],
+    },
+    {
+      id: 7,
+      name: 'Brown Jorts',
+      price: 60000,
+      images: [Product7], // Add more images as array when available
+      sizes: ['L', 'XL', 'XXL'],
+    },
+    {
+      id: 8,
       name: 'Tank Top',
       price: 35000,
-      image: Product5,
-      sizes: ['28', '30', '32', '34'],
+      images: [Product8], // Add more images as array when available
+      sizes: ['S', 'M', 'L'],
     },
   ];
 
   return (
     <div className="body-container">
       <Header />
+
       {/* Hero Section */}
       <div className="section-1"></div>
+
       {/* Product Carousel */}
       <div className="section-2" id="products-section">
         <Swiper
-          modules={[Autoplay, Pagination]}
+          modules={[Pagination]}
           spaceBetween={30}
           loop
           autoplay={{ delay: 3000, disableOnInteraction: false }}
@@ -91,17 +123,17 @@ function Home() {
           {products.map((product) => (
             <SwiperSlide key={product.id}>
               <ProductCard
+                id={product.id}
                 product={product.name}
-                price={product.price.toLocaleString('en-US')}
-                image={product.image}
-                hoverPic={product.hoverPic}
-                image_dimensions={product.imageDimensions}
+                price={product.price}
+                images={product.images}
                 sizes={product.sizes}
               />
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
+
       {/* About / Branding Section */}
       <div className="section-3">
         <div className="section-3-container">
@@ -121,6 +153,7 @@ function Home() {
           </div>
         </div>
       </div>
+
       <Footer />
     </div>
   );

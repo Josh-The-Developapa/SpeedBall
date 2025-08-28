@@ -2,14 +2,13 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiCheckCircle } from 'react-icons/fi';
 import { ImSpinner9 } from 'react-icons/im';
-import hero from '../../assets/RS2.jpg';
+import hero from '../../assets/Cart-Img.jpg';
 import Header from '../../components/Header/Header.jsx';
 import Footer from '../../components/Footer/Footer.jsx';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import { supabase } from '../../lib/supabaseClient';
 import CloseIcon from '../../assets/close-icon.svg';
-import PlusIcon from '../../assets/plus-circle.svg';
-import MinusIcon from '../../assets/minus-circle.svg';
+import { Minus, Plus, X } from 'lucide-react';
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -152,7 +151,7 @@ function CartPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#232323] text-white">
+    <div className="min-h-screen bg-[#fcfbf8] text-white">
       <Header />
       <div className="flex flex-col lg:flex-row min-h-[calc(100vh-80px)]">
         {/* Hero image */}
@@ -168,7 +167,9 @@ function CartPage() {
         <div className="lg:w-[58vw] flex flex-col min-h-[calc(100vh-80px)]">
           {/* Cart Header */}
           <div className="pt-6 px-6 mt-21">
-            <div className="text-2xl font-semibold m-0 p-0">Your Cart</div>
+            <div className="text-2xl font-semibold m-0 p-0 ml-4 text-[#1A1A1A]">
+              Your Cart
+            </div>
           </div>
 
           {/* Cart Items */}
@@ -178,7 +179,7 @@ function CartPage() {
                 {cartItems.map((item, index) => (
                   <div
                     key={index}
-                    className="relative w-full md:w-[350px] bg-[#2a2a2a] border border-gray-600 py-5 px-4 flex items-center justify-between text-white min-h-[9rem]"
+                    className="relative w-full md:w-[350px] bg-[white] py-5 px-4 flex items-center justify-between text-[#1A1A1A] min-h-[9rem]"
                   >
                     <div className="flex items-center space-x-4">
                       <img
@@ -200,10 +201,8 @@ function CartPage() {
                           UGX {item.price.toLocaleString('en-UG')}
                         </p>
                         <div className="flex items-center space-x-2 mt-1">
-                          <img
-                            src={MinusIcon}
-                            alt="Minus-Icon"
-                            className="w-6 h-6 flex items-center justify-center text-xs"
+                          <Minus
+                            size={16}
                             onClick={() =>
                               handleQuantityChange(index, item.quantity - 1)
                             }
@@ -212,10 +211,8 @@ function CartPage() {
                           <span className="text-sm w-4 text-center">
                             {item.quantity}
                           </span>
-                          <img
-                            src={PlusIcon}
-                            alt="Plus-Icon"
-                            className="w-6 h-6 flex items-center justify-center rounded-full text-xs"
+                          <Plus
+                            size={16}
                             onClick={() =>
                               handleQuantityChange(index, item.quantity + 1)
                             }
@@ -232,10 +229,10 @@ function CartPage() {
                     </div>
                     {/* Close button positioned absolutely top right */}
 
-                    <img
-                      src={CloseIcon}
-                      alt="Close-Icon"
-                      className="absolute top-2 right-2 w-6 h-6 text-[10px] rounded-full flex items-center justify-center hover:text-white"
+                    <X
+                      size={16}
+                      stroke="#E7634E"
+                      className="absolute top-4 right-4 text-[10px] rounded-full flex items-center justify-center"
                       style={{ cursor: 'pointer' }}
                       onClick={() => handleDeleteItem(index)}
                     />
@@ -340,7 +337,7 @@ function CartPage() {
             {/* Total Section */}
             <div className="flex flex-col items-start text-lg space-y-1 pb-4">
               <span className="font-semibold">Total</span>
-              <span className="text-2xl font-medium">
+              <span className="text-2xl font-medium text-[#4D4D4D]">
                 UGX {computeTotals(cartItems).totalCost.toLocaleString('en-UG')}
               </span>
             </div>
@@ -349,9 +346,9 @@ function CartPage() {
             <div className="flex gap-4">
               {!checkoutComplete ? (
                 <button
-                  className={`flex-1 px-6 py-4 rounded-lg font-semibold text-lg flex items-center justify-center transition-colors ${
+                  className={`w-[173px] px-[24px] py-[12px] rounded-lg font-semibold text-sm flex items-center justify-center transition-colors ${
                     computeTotals(cartItems).totalCost > 0
-                      ? 'bg-blue-700 text-white hover:bg-blue-800'
+                      ? 'bg-[#8A7345] text-white hover:bg-[#554422]'
                       : 'bg-gray-400 text-gray-200 cursor-not-allowed'
                   }`}
                   onClick={() => {
@@ -362,21 +359,21 @@ function CartPage() {
                   disabled={computeTotals(cartItems).totalCost <= 0}
                 >
                   {loading ? (
-                    <ImSpinner9 className="w-6 h-6 animate-spin" />
+                    <ImSpinner9 className="w-4 h-4 animate-spin" />
                   ) : (
-                    'CHECKOUT'
+                    'Go to checkout'
                   )}
                 </button>
               ) : (
-                <div className="flex-1 bg-green-600 text-white py-4 px-6 rounded-lg font-semibold text-lg flex items-center justify-center">
-                  <FiCheckCircle className="w-5 h-5 mr-2 animate-pulse" />
+                <div className="w-[173px] bg-green-600 text-white py-1 px-2 rounded-lg font-semibold text-sm flex items-center justify-center">
+                  <FiCheckCircle className="w-4 h-4 mr-2 animate-pulse" />
                   Order Sent
                 </div>
               )}
 
-              <Link to="/shop" className="flex-1">
-                <button className="w-full px-6 py-4 bg-white text-white border border-gray-300 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors justify-center">
-                  CONTINUE SHOPPING
+              <Link to="/shop">
+                <button className="w-[173px] px-[24px] py-[12px] bg-white text-[#1A1A1A] border border-gray-300 rounded-lg font-semibold text-sm hover:bg-gray-100 transition-colors flex items-center justify-center">
+                  Continue Shopping
                 </button>
               </Link>
             </div>
@@ -388,7 +385,7 @@ function CartPage() {
                     onClick={handleClosePaymentModal}
                     className="absolute top-2 right-2 text-gray-600 hover:text-black text-xl"
                   >
-                    ×
+                    x
                   </button>
 
                   <h2 className="text-xl font-semibold mb-4">
