@@ -19,9 +19,6 @@ import Product11 from '../../assets/Black-pants2.png';
 import Product12 from '../../assets/Black-Jacket2.jpg';
 import RandomShi from '../../assets/rando-shi.png';
 
-// Default Hero for products without specific images
-import Hero from '../../assets/denim-jeans.webp';
-
 // Swiper stuff
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
