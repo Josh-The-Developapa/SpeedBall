@@ -290,16 +290,18 @@ function CartPage() {
                     />
                     <input
                       type="tel"
-                      inputMode="tel"
-                      pattern="[\d\s()+-]*"
                       name="phoneNumber"
                       placeholder="Phone Number"
                       value={address.phoneNumber}
+                      inputMode="tel"
+                      pattern="[\d\s()+-]*"
+                      maxLength={20}
                       onChange={(e) => {
                         const val = e.target.value;
-                        // Allow digits, +, -, space, (, )
+                        // Allow only digits, spaces, +, (, ), and -
                         if (/^[\d\s()+-]*$/.test(val)) {
                           setAddress({ ...address, phoneNumber: val });
+                          setError('');
                         }
                       }}
                       onPaste={(e) => {
@@ -404,8 +406,8 @@ function CartPage() {
                   </p>
 
                   <ul className="mb-4 text-blue-700 font-bold text-lg space-y-1">
-                    <li>• +256 770 000000</li>
-                    <li>• +256 701 111111</li>
+                    <li>â€¢ +256 770 000000</li>
+                    <li>â€¢ +256 701 111111</li>
                   </ul>
 
                   <p className="mb-2 text-sm text-gray-800">
