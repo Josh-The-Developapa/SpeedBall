@@ -6,7 +6,7 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import ProductCard from '../../components/ProductCard/ProductCard';
 // Assets
-import YourModelImage from '../../assets/RS2.jpg';
+import YourModelImage from '../../assets/RS4.png';
 import RandomShi from '../../assets/rando-shi.png';
 // import Product1 from '../../assets/Black-Full-Fit.jpg';
 // import Product2 from '../../assets/Brown-Full-Fit.jpg';
