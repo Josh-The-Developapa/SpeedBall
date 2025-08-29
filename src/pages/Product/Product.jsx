@@ -1,32 +1,21 @@
-import './Product.css';
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+import React, { useContext, useState, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useContext, useState } from 'react';
-import Context from '../../Context/Context';
-
-// Assets from Home/Shop
-import Product3 from '../../assets/Black-Jacket.jpg';
-import Product4 from '../../assets/Brown-Jacket.jpg';
-import Product5 from '../../assets/Cart-Img.jpg';
-import Product6 from '../../assets/Brown-Pants.jpg';
-import Product7 from '../../assets/Brown-Jorts.png';
-import Product8 from '../../assets/White-Tank.jpg';
-
-// Second Product Images
-import Product10 from '../../assets/Brown-Jacket2.png';
-import Product11 from '../../assets/Black-pants2.png';
-import Product12 from '../../assets/Black-Jacket2.jpg';
-import Product13 from '../../assets/Brown-Pants2.jpg';
-import Product14 from '../../assets/Brown-Jorts2.jpg';
-import Product15 from '../../assets/White-Tank.png';
-import RandomShi from '../../assets/rando-shi.png';
-
-// Swiper stuff
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+
+import './Product.css';
+import Context from '../../Context/Context';
+import {
+  productsData,
+  brandAssets,
+  brandContent,
+} from '../../data/productData.jsx';
+
+// Components
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
 
 function Product() {
   const { product } = useParams();
@@ -36,125 +25,68 @@ function Product() {
   const [selectedSize, setSelectedSize] = useState('');
   const [sizeJustAdded, setSizeJustAdded] = useState(false);
   const [buttonText, setButtonText] = useState('ADD TO CART');
-  const [currentImageIndex, setCurrentImageIndex] = useState(0); // New state for image switching
-
-  // Product data from Home/Shop (synchronized)
-  const productsData = [
-    {
-      id: 3,
-      name: 'Black Jacket',
-      urlName: 'black-jacket',
-      price: 60000,
-      images: [Product12, Product3],
-      sizes: ['L', 'XL', 'XXL'],
-    },
-    {
-      id: 4,
-      name: 'Brown Jacket',
-      urlName: 'brown-jacket',
-      price: 60000,
-      images: [Product4, Product10],
-      sizes: ['L', 'XL', 'XXL'],
-    },
-    {
-      id: 5,
-      name: 'Black Pants',
-      urlName: 'black-pants',
-      price: 60000,
-      images: [Product5, Product11],
-      sizes: ['L', 'XL', 'XXL'],
-    },
-    {
-      id: 6,
-      name: 'Brown Pants',
-      urlName: 'brown-pants',
-      price: 60000,
-      images: [Product6],
-      sizes: ['L', 'XL', 'XXL'],
-    },
-    {
-      id: 7,
-      name: 'Brown Jorts',
-      urlName: 'brown-jorts',
-      price: 60000,
-      images: [Product7],
-      sizes: ['L', 'XL', 'XXL'],
-    },
-
-    {
-      id: 8,
-      name: 'White Tank Top',
-      urlName: 'white-tank-top',
-      price: 35000,
-      images: [Product15, Product8], // Add more images as array when available
-      sizes: ['S', 'M', 'L'],
-    },
-    {
-      id: 9,
-      name: 'Black Tank Top',
-      urlName: 'black-tank-top',
-      price: 35000,
-      images: [Product8], // Add more images as array when available
-      sizes: ['S', 'M', 'L'],
-    },
-  ];
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Find current product based on URL parameter
-  const currentProduct = productsData.find((p) => p.urlName === product) || {
-    id: 0,
-    name: 'Product Not Found',
-    urlName: 'not-found',
-    price: 0,
-    images: [Hero],
-    sizes: ['M', 'L', 'XL'],
-  };
+  const currentProduct = useMemo(() => {
+    const foundProduct = productsData.find((p) => p.urlName === product);
+    return (
+      foundProduct || {
+        id: 0,
+        name: 'Product Not Found',
+        urlName: 'not-found',
+        price: 0,
+        images: [brandAssets.logo],
+        sizes: ['M', 'L', 'XL'],
+      }
+    );
+  }, [product]);
 
   // Initialize selectedSize with first available size
-  useState(() => {
+  React.useEffect(() => {
     if (!selectedSize && currentProduct.sizes.length > 0) {
       setSelectedSize(currentProduct.sizes[0]);
     }
-  }, [currentProduct.sizes]);
+  }, [currentProduct.sizes, selectedSize]);
 
-  // Function to handle image switching
-  const handleImageClick = () => {
+  // Handle image switching
+  const handleImageClick = useCallback(() => {
     if (currentProduct.images.length > 1) {
       setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? 1 : 0));
     }
-  };
+  }, [currentProduct.images.length]);
 
-  // Get current front and back images based on currentImageIndex
-  const getFrontImage = () => {
-    return currentProduct.images[currentImageIndex] || Hero;
-  };
+  // Get current images
+  const getFrontImage = useCallback(() => {
+    return currentProduct.images[currentImageIndex] || brandAssets.logo;
+  }, [currentProduct.images, currentImageIndex]);
 
-  const getBackImage = () => {
+  const getBackImage = useCallback(() => {
     if (currentProduct.images.length > 1) {
       const backIndex = currentImageIndex === 0 ? 1 : 0;
-      return currentProduct.images[backIndex] || Hero;
+      return currentProduct.images[backIndex] || brandAssets.logo;
     }
-    return currentProduct.images[0] || Hero;
-  };
+    return currentProduct.images[0] || brandAssets.logo;
+  }, [currentProduct.images, currentImageIndex]);
 
-  const handleAddToCart = () => {
-    const sanitizedPrice = currentProduct.price;
-
+  // Handle add to cart
+  const handleAddToCart = useCallback(() => {
     const productObj = {
       id: currentProduct.id,
       title: currentProduct.name,
-      price: sanitizedPrice,
-      image: currentProduct.images[0].split('?')[0],
+      price: currentProduct.price,
+      image: currentProduct.images[0]?.split('?')[0] || brandAssets.logo,
       quantity: 1,
       size: selectedSize || currentProduct.sizes[0],
     };
 
+    // Animate cart if function exists
     if (ctx.setAnimateCart) {
       ctx.setAnimateCart(true);
-      setTimeout(() => {
-        ctx.setAnimateCart(false);
-      }, 1000);
+      setTimeout(() => ctx.setAnimateCart(false), 1000);
     }
 
+    // Save to localStorage
     try {
       const existingCartItems =
         JSON.parse(localStorage.getItem('CartItems')) || [];
@@ -174,6 +106,7 @@ function Product() {
       console.error('Error saving to cart:', error);
     }
 
+    // UI feedback
     setSizeJustAdded(true);
     setTimeout(() => {
       setSelectedSize('');
@@ -181,10 +114,16 @@ function Product() {
     }, 100);
 
     setButtonText('ADDED!');
-    setTimeout(() => {
-      setButtonText('ADD TO CART');
-    }, 2000);
-  };
+    setTimeout(() => setButtonText('ADD TO CART'), 2000);
+  }, [currentProduct, selectedSize, ctx]);
+
+  // Handle size selection
+  const handleSizeSelect = useCallback((size) => {
+    setSelectedSize(size);
+  }, []);
+
+  const canSwitchImages = currentProduct.images.length > 1;
+  const cursorStyle = canSwitchImages ? 'pointer' : 'default';
 
   return (
     <div className="products-body-container">
@@ -199,27 +138,25 @@ function Product() {
                 alt={`${currentProduct.name} back view`}
                 className="desktop-product-image desktop-image-back clickable-image"
                 onClick={handleImageClick}
-                style={{
-                  cursor:
-                    currentProduct.images.length > 1 ? 'pointer' : 'default',
-                }}
+                style={{ cursor: cursorStyle }}
               />
               <img
                 src={getFrontImage()}
                 alt={`${currentProduct.name} front view`}
                 className="desktop-product-image desktop-image-front clickable-image"
                 onClick={handleImageClick}
-                style={{
-                  cursor:
-                    currentProduct.images.length > 1 ? 'pointer' : 'default',
-                }}
+                style={{ cursor: cursorStyle }}
               />
             </div>
           </div>
 
           {/* Desktop Layout - Right Content */}
           <div className="desktop-product-info">
-            <img src={RandomShi} alt="Random-Shi" className="brand-logo" />
+            <img
+              src={brandAssets.logo}
+              alt="Brand Logo"
+              className="brand-logo"
+            />
             <h2 className="product-title">
               {currentProduct.name.toUpperCase()}
             </h2>
@@ -227,10 +164,7 @@ function Product() {
               UGX {currentProduct.price.toLocaleString()}
             </p>
             <p className="product-description">
-              Rooted in the energy of the streets, our brand is built for those
-              who move against the grain, challenge norms, and carve out their
-              own space in the world. Premium quality materials meet
-              street-inspired design.
+              {brandContent.productDescription}
             </p>
 
             {/* Size Buttons */}
@@ -238,10 +172,7 @@ function Product() {
               {currentProduct.sizes.map((size) => (
                 <button
                   key={size}
-                  onClick={() => {
-                    setSelectedSize(size);
-                    console.log('Size selected:', size);
-                  }}
+                  onClick={() => handleSizeSelect(size)}
                   className={`size-buttons ${
                     selectedSize === size && !sizeJustAdded
                       ? 'size-selected'
@@ -253,7 +184,7 @@ function Product() {
               ))}
             </div>
 
-            {/* Buttons */}
+            {/* Action Buttons */}
             <div className="product-buttons">
               <button className="add-to-cart" onClick={handleAddToCart}>
                 {buttonText}
@@ -288,7 +219,11 @@ function Product() {
 
           {/* Mobile Layout - Product Info */}
           <div className="mobile-product-info">
-            <img src={RandomShi} alt="Random-Shi" className="brand-logo" />
+            <img
+              src={brandAssets.logo}
+              alt="Brand Logo"
+              className="brand-logo"
+            />
             <h2 className="product-title">
               {currentProduct.name.toUpperCase()}
             </h2>
@@ -296,10 +231,7 @@ function Product() {
               UGX {currentProduct.price.toLocaleString()}
             </p>
             <p className="product-description">
-              Rooted in the energy of the streets, our brand is built for those
-              who move against the grain, challenge norms, and carve out their
-              own space in the world. Premium quality materials meet
-              street-inspired design.
+              {brandContent.productDescription}
             </p>
 
             {/* Size Buttons */}
@@ -307,10 +239,7 @@ function Product() {
               {currentProduct.sizes.map((size) => (
                 <button
                   key={size}
-                  onClick={() => {
-                    setSelectedSize(size);
-                    console.log('Size selected:', size);
-                  }}
+                  onClick={() => handleSizeSelect(size)}
                   className={`size-buttons ${
                     selectedSize === size && !sizeJustAdded
                       ? 'size-selected'
@@ -322,7 +251,7 @@ function Product() {
               ))}
             </div>
 
-            {/* Buttons */}
+            {/* Action Buttons */}
             <div className="product-buttons">
               <button className="add-to-cart" onClick={handleAddToCart}>
                 {buttonText}
