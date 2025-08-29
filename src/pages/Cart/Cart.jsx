@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { FiCheckCircle } from 'react-icons/fi';
 import { ImSpinner9 } from 'react-icons/im';
@@ -15,6 +15,7 @@ function CartPage() {
   const [loading, setLoading] = useState(false);
   const [showAddressOverlay, setShowAddressOverlay] = useState(false);
   const [error, setError] = useState('');
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const [showPaymentModal, setShowPaymentModal] = useState(() => {
     return localStorage.getItem('PaymentModalState') === 'open';
@@ -35,11 +36,10 @@ function CartPage() {
     if (!raw) return '';
 
     const parsed = parsePhoneNumberFromString(raw, 'UG'); // fallback region if country code is missing
-    if (!parsed.isValid()) {
+    if (!parsed || !parsed.isValid()) {
       setError('Please enter a valid phone number.');
-      return;
+      return raw;
     }
-    if (!parsed || !parsed.isValid()) return raw;
 
     return parsed.formatInternational(); // e.g. +256 712 345 678
   }
@@ -55,31 +55,37 @@ function CartPage() {
     }
   }, []);
 
-  const handleQuantityChange = (index, newQuantity) => {
+  // Memoized handlers to prevent unnecessary re-renders
+  const handleQuantityChange = useCallback((index, newQuantity) => {
     if (newQuantity < 1) return; // prevent non positive quantities
 
-    const updatedCartItems = [...cartItems];
-    updatedCartItems[index].quantity = newQuantity;
-    setCartItems(updatedCartItems);
-    localStorage.setItem('CartItems', JSON.stringify(updatedCartItems));
-  };
+    setCartItems((prevItems) => {
+      const updatedCartItems = [...prevItems];
+      updatedCartItems[index].quantity = newQuantity;
+      localStorage.setItem('CartItems', JSON.stringify(updatedCartItems));
+      return updatedCartItems;
+    });
+  }, []);
 
-  const handleDeleteItem = (index) => {
-    const updatedCartItems = [...cartItems];
-    updatedCartItems.splice(index, 1);
-    setCartItems(updatedCartItems);
-    localStorage.setItem('CartItems', JSON.stringify(updatedCartItems));
-  };
+  const handleDeleteItem = useCallback((index) => {
+    setCartItems((prevItems) => {
+      const updatedCartItems = [...prevItems];
+      updatedCartItems.splice(index, 1);
+      localStorage.setItem('CartItems', JSON.stringify(updatedCartItems));
+      return updatedCartItems;
+    });
+  }, []);
 
-  const computeTotals = (array) => {
+  // Memoized totals computation to prevent recalculation on every render
+  const totals = useMemo(() => {
     let totalQuantity = 0;
     let totalCost = 0;
-    array.forEach((item) => {
+    cartItems.forEach((item) => {
       totalQuantity += Number(item.quantity);
       totalCost += item.price * item.quantity;
     });
     return { totalQuantity, totalCost };
-  };
+  }, [cartItems]);
 
   const handleClosePaymentModal = () => {
     if (
@@ -94,7 +100,7 @@ function CartPage() {
 
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
-    setAddress({ ...address, [name]: value });
+    setAddress((prev) => ({ ...prev, [name]: value }));
     setError('');
   };
 
@@ -119,7 +125,7 @@ function CartPage() {
       return;
     }
 
-    const { totalQuantity, totalCost } = computeTotals(cartItems);
+    const { totalQuantity, totalCost } = totals;
     const delivery_address = `${fullName} \n\n ${street}, ${cityTown}, ${address.country}`;
     const phone_number = parsedPhone.formatInternational();
 
@@ -153,39 +159,60 @@ function CartPage() {
   return (
     <div className="min-h-screen bg-[#fcfbf8] text-white">
       <Header />
-      <div className="flex flex-col lg:flex-row min-h-[calc(100vh-80px)]">
-        {/* Hero image */}
-        <div className="w-full lg:w-[42vw] h-[50vh] lg:h-auto">
-          <img
-            src={hero}
-            alt="Hero"
-            className="w-full h-full object-cover object-[center_top]"
-          />
+      <div className="grid grid-cols-1 lg:grid-cols-[42vw_1fr] min-h-[calc(100vh-80px)]">
+        {/* Hero image with completely fixed positioning */}
+        <div className="h-[50vh] lg:h-full relative overflow-hidden">
+          <div className="absolute inset-0 will-change-auto">
+            <img
+              src={hero}
+              alt="Hero"
+              className="w-full h-full object-cover object-[center_top]"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center top',
+                display: 'block',
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+              }}
+            />
+          </div>
         </div>
 
-        {/* Right side */}
-        <div className="lg:w-[58vw] flex flex-col min-h-[calc(100vh-80px)]">
+        {/* Right side with isolation from left side */}
+        <div className="flex flex-col min-h-[calc(100vh-80px)] lg:min-h-full relative">
           {/* Cart Header */}
-          <div className="pt-6 px-6 mt-21">
+          <div className="pt-6 px-6 mt-21 flex-shrink-0">
             <div className="text-2xl font-semibold m-0 p-0 ml-4 text-[#1A1A1A]">
               Your Cart
             </div>
           </div>
 
-          {/* Cart Items */}
-          <div className="flex-1 xl:p-6 overflow-y-auto p-3">
+          {/* Cart Items with completely isolated container */}
+          <div
+            className="flex-1 xl:p-6 overflow-y-auto p-3 min-h-0"
+            style={{
+              contain: 'layout style paint',
+              transform: 'translateZ(0)', // Force new stacking context
+            }}
+          >
             {cartItems.length > 0 ? (
               <div className="flex flex-wrap gap-4">
                 {cartItems.map((item, index) => (
                   <div
-                    key={index}
+                    key={`${item.id || index}-${item.size}`} // Better key for React reconciliation
                     className="relative w-full md:w-[350px] bg-[white] py-5 px-4 flex items-center justify-between text-[#1A1A1A] min-h-[9rem]"
                   >
                     <div className="flex items-center space-x-4">
                       <img
                         src={item.image}
                         alt={item.title}
-                        className="w-20 h-20 object-contain"
+                        className="w-20 h-20 object-contain flex-shrink-0"
+                        loading="lazy"
                       />
                       <div className="flex flex-col justify-between">
                         <h3
@@ -228,7 +255,6 @@ function CartPage() {
                       </span>
                     </div>
                     {/* Close button positioned absolutely top right */}
-
                     <X
                       size={16}
                       stroke="#E7634E"
@@ -246,8 +272,8 @@ function CartPage() {
             )}
           </div>
 
-          {/* Checkout Section */}
-          <div className="bg-white text-black p-6">
+          {/* Checkout Section with stable height */}
+          <div className="bg-white text-black p-6 flex-shrink-0">
             {/* Address Section */}
             {showAddressOverlay && (
               <div className="fixed inset-0 bg-black bg-opacity-20 z-50 flex items-center justify-center">
@@ -300,7 +326,7 @@ function CartPage() {
                         const val = e.target.value;
                         // Allow only digits, spaces, +, (, ), and -
                         if (/^[\d\s()+-]*$/.test(val)) {
-                          setAddress({ ...address, phoneNumber: val });
+                          setAddress((prev) => ({ ...prev, phoneNumber: val }));
                           setError('');
                         }
                       }}
@@ -340,7 +366,7 @@ function CartPage() {
             <div className="flex flex-col items-start text-lg space-y-1 pb-4">
               <span className="font-semibold">Total</span>
               <span className="text-2xl font-medium text-[#4D4D4D]">
-                UGX {computeTotals(cartItems).totalCost.toLocaleString('en-UG')}
+                UGX {totals.totalCost.toLocaleString('en-UG')}
               </span>
             </div>
 
@@ -349,16 +375,16 @@ function CartPage() {
               {!checkoutComplete ? (
                 <button
                   className={`w-[173px] px-[24px] py-[12px] rounded-lg font-semibold text-sm flex items-center justify-center transition-colors ${
-                    computeTotals(cartItems).totalCost > 0
+                    totals.totalCost > 0
                       ? 'bg-[#8A7345] text-white hover:bg-[#554422]'
                       : 'bg-gray-400 text-gray-200 cursor-not-allowed'
                   }`}
                   onClick={() => {
-                    if (computeTotals(cartItems).totalCost > 0) {
+                    if (totals.totalCost > 0) {
                       setShowAddressOverlay(true);
                     }
                   }}
-                  disabled={computeTotals(cartItems).totalCost <= 0}
+                  disabled={totals.totalCost <= 0}
                 >
                   {loading ? (
                     <ImSpinner9 className="w-4 h-4 animate-spin" />
