@@ -11,7 +11,7 @@ import Product4 from '../../assets/Brown-Jacket.jpg';
 import Product5 from '../../assets/Black-pants.png';
 import Product6 from '../../assets/Brown-Pants.jpg';
 import Product7 from '../../assets/Brown-Jorts.png';
-import Product8 from '../../assets/Tank.png';
+import Product8 from '../../assets/White-Tank.png';
 
 // Second Product Images
 import Product10 from '../../assets/Brown-Jacket2.png';

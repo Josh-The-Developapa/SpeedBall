@@ -12,15 +12,18 @@ import RandomShi from '../../assets/rando-shi.png';
 // import Product2 from '../../assets/Brown-Full-Fit.jpg';
 import Product3 from '../../assets/Black-Jacket.jpg';
 import Product4 from '../../assets/Brown-Jacket.jpg';
-import Product5 from '../../assets/Black-pants.png';
+import Product5 from '../../assets/Cart-Img.jpg';
 import Product6 from '../../assets/Brown-Pants.jpg';
 import Product7 from '../../assets/Brown-Jorts.png';
-import Product8 from '../../assets/Tank.png';
+import Product8 from '../../assets/White-Tank.jpg';
+// import Product9 from '../../assets/Black-Tank.png';
 
 // Second Product Images
 import Product10 from '../../assets/Brown-Jacket2.png';
 import Product11 from '../../assets/Black-pants2.png';
 import Product12 from '../../assets/Black-Jacket2.jpg';
+import Product13 from '../../assets/Brown-Pants2.jpg';
+import Product14 from '../../assets/Brown-Jorts2.jpg';
 
 // Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -74,19 +77,26 @@ function Home() {
       id: 6,
       name: 'Brown Pants',
       price: 60000,
-      images: [Product6], // Add more images as array when available
+      images: [Product6, Product13], // Add more images as array when available
       sizes: ['L', 'XL', 'XXL'],
     },
     {
       id: 7,
       name: 'Brown Jorts',
       price: 60000,
-      images: [Product7], // Add more images as array when available
+      images: [Product14, Product7], // Add more images as array when available
       sizes: ['L', 'XL', 'XXL'],
     },
     {
       id: 8,
-      name: 'Tank Top',
+      name: 'White Tank Top',
+      price: 35000,
+      images: [Product8], // Add more images as array when available
+      sizes: ['S', 'M', 'L'],
+    },
+    {
+      id: 9,
+      name: 'Black Tank Top',
       price: 35000,
       images: [Product8], // Add more images as array when available
       sizes: ['S', 'M', 'L'],

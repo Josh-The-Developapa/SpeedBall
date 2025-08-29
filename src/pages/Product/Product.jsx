@@ -8,15 +8,18 @@ import Context from '../../Context/Context';
 // Assets from Home/Shop
 import Product3 from '../../assets/Black-Jacket.jpg';
 import Product4 from '../../assets/Brown-Jacket.jpg';
-import Product5 from '../../assets/Black-pants.png';
+import Product5 from '../../assets/Cart-Img.jpg';
 import Product6 from '../../assets/Brown-Pants.jpg';
 import Product7 from '../../assets/Brown-Jorts.png';
-import Product8 from '../../assets/Tank.png';
+import Product8 from '../../assets/White-Tank.jpg';
 
 // Second Product Images
 import Product10 from '../../assets/Brown-Jacket2.png';
 import Product11 from '../../assets/Black-pants2.png';
 import Product12 from '../../assets/Black-Jacket2.jpg';
+import Product13 from '../../assets/Brown-Pants2.jpg';
+import Product14 from '../../assets/Brown-Jorts2.jpg';
+import Product15 from '../../assets/White-Tank.png';
 import RandomShi from '../../assets/rando-shi.png';
 
 // Swiper stuff
@@ -77,12 +80,21 @@ function Product() {
       images: [Product7],
       sizes: ['L', 'XL', 'XXL'],
     },
+
     {
       id: 8,
-      name: 'Tank Top',
-      urlName: 'tank-top',
+      name: 'White Tank Top',
+      urlName: 'white-tank-top',
       price: 35000,
-      images: [Product8],
+      images: [Product15, Product8], // Add more images as array when available
+      sizes: ['S', 'M', 'L'],
+    },
+    {
+      id: 9,
+      name: 'Black Tank Top',
+      urlName: 'black-tank-top',
+      price: 35000,
+      images: [Product8], // Add more images as array when available
       sizes: ['S', 'M', 'L'],
     },
   ];

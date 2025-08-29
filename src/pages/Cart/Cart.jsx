@@ -393,19 +393,18 @@ function CartPage() {
                   </h2>
 
                   <p className="mb-3 text-sm text-gray-800">
-                    A courier will call your number shortly to confirm your
-                    delivery address. <br />
+                    A member of the SpeedBall team will text your number shortly
+                    to confirm your delivery address. <br />
                     <strong>Please do not make any payment yet.</strong>
                   </p>
 
                   <p className="mb-2 text-sm text-gray-800">
                     Once the courier arrives and confirms the delivery, pay{' '}
-                    <strong>only</strong> to the following numbers:
+                    <strong>only</strong> to the following number:
                   </p>
 
                   <ul className="mb-4 text-blue-700 font-bold text-lg space-y-1">
-                    <li>• +256 770 000000</li>
-                    <li>• +256 701 111111</li>
+                    <li>• +256 785 957963</li>
                   </ul>
 
                   <p className="mb-2 text-sm text-gray-800">
@@ -415,10 +414,6 @@ function CartPage() {
                   <div className="font-medium text-base text-gray-900 mb-4">
                     {formatPhoneNumber(address.phoneNumber)}
                   </div>
-
-                  <p className="text-xs text-gray-600">
-                    Keep this screen open until the call is complete.
-                  </p>
                 </div>
               </div>
             )}
