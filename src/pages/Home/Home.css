@@ -145,7 +145,7 @@
 @media screen and (max-width: 1024px) {
   /* Hero */
   .section-1 {
-    background-image: url(../../assets/Full-Fit.png);
+    background-image: url(../../assets/mobile-hero.jpg);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
